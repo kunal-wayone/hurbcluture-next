@@ -13,8 +13,8 @@ import MobileMenu from "./MobileMenu";
 
 export default function HeaderBar() {
   return (
-    <div className="bg-white flex justify-between pl-0 p-3 lg:px-20 shadow  items-center gap-4 absolute top-0 z-[100] w-full">
-      <div className="px-2 lg:px-4">
+    <div className="bg-white flex justify-between pl-0 p-3 lg:px-16 shadow  items-center gap-4 absolute top-0 z-[100] w-full">
+      <div className="">
         <Link href={"/"}>
           <Image
             src={"/assets/logo/logo.png"}

@@ -1,0 +1,123 @@
+import React from "react";
+import Breadcrumbs from "../components/common/BreadCrumb";
+import { RiSecurePaymentLine } from "react-icons/ri";
+import CartProduct from "../cart/CartProduct";
+import Payment from "./components/Payment";
+import Link from "next/link";
+
+export default function page() {
+  const path = [
+    { label: "Home", href: "/" },
+    { label: "Product Detail", href: `/prduct/${1}` },
+    { label: "Order Summery", href: `/order-smmery` },
+  ];
+  return (
+    <div className="mt-[9.6rem] bg-white text-dark-primary">
+      <Breadcrumbs paths={path} />
+      <div className="max-w-7xl p-4 lg:px-16 m-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-8 gap-4">
+          <div className="lg:col-span-6">
+            <div className="flex items-center justify-between w-full bg-gray-300/30 p-4 rounded-2xl mb-8">
+              <div className="text-gray-500">
+                <h3>
+                  <b className="mr-4 text-gray-900">Deliver to:</b>Prashant,
+                  132001
+                </h3>
+                <p>Nilgiri Apartment, Delhi, 110019, India</p>
+              </div>
+              <div className="flex flex-col justify-center  text-center text-primary">
+                <span className="font-semibold">Change Address</span>
+              </div>
+            </div>
+
+            <CartProduct />
+
+            <Payment />
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="p-4 rounded-2xl shadow-md bg-gray-300/30 border border-gray-300/30 mb-8">
+              <h3 className="font-bold mb-4 text-center text-gray-400">
+                Price details
+              </h3>
+              <hr className="mb-4 border-gray-300" />
+              <div className="flex items-center justify-between w-full">
+                <p className="text-gray-500 mb-2">Price (1 item)</p>
+                <p className="text-gray-500 mb-2">₹ 14,400</p>
+              </div>
+
+              <div className="flex items-center justify-between w-full">
+                <p className="text-gray-500 mb-2">Discount</p>
+                <p className="text-gray-500 mb-2">₹ 2,300</p>
+              </div>
+
+              <div className="flex items-center justify-between w-full">
+                <p className="text-gray-500 mb-2">Delivery Charges</p>
+                <p className="text-gray-500 mb-2">Free</p>
+              </div>
+              <div className="flex items-center justify-between w-full mb-2">
+                <p className="text-gray-500 mb-2">Tax</p>
+                <p className="text-gray-500 mb-2">₹ 37</p>
+              </div>
+              <hr className="mb-4 border-gray-300" />
+
+              <div className="flex flex-col gap-4 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 font-bold">Total:</span>
+                  <span className="text-gray-900 font-bold">₹ 12,100</span>
+                </div>
+              </div>
+
+              <Link href={"/order-review"} className="cursor bg-primary p-2 px-10 text-gray-50 rounded-xl">
+                Proceed to checkout
+              </Link>
+
+              <span className="text-gray-400 font-semibold flex items-center gap-2 my-4 mx-auto text-center justify-center">
+                <RiSecurePaymentLine className="text-xl text-primary" /> 100%
+                Secure Payment
+              </span>
+            </div>
+
+            <div>
+              <p className="text-lg mb-2 font-semibold">Apply Coupons</p>
+              <hr className="border-gray-300 pb-2" />
+              <div className="flex items-center w-11/12 m-auto mb-8  border-b border-gray-300">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  className="text-sm outline-0 border-0 p-1 w-3/5"
+                />
+                <button className="w-2/5 p-1 text-right px-3 text-xs text-primary">
+                  Apply
+                </button>
+              </div>
+
+              <div className="flex items-center w-full m-auto  border p-2 px-4 rounded-xl mb-4 border-gray-300">
+                <p className="text-xs w-4/5">
+                  Use Code
+                  <span className="text-primary mx-1">THC ERA</span>
+                  to get 20% off
+                </p>
+                <button className="w-1/5 p-1 text-xs text-primary">
+                  Apply
+                </button>
+              </div>
+
+              <div className="flex items-center w-full m-auto  border p-2 px-4 rounded-xl  border-gray-300">
+                <p className="text-xs w-4/5">
+                  Use Code
+                  <span className="text-primary mx-1"> FIRST ONE</span>
+                  
+                   on your first purchase to get 40% off
+                </p>
+                <button className="w-1/5 p-1 text-xs text-primary">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

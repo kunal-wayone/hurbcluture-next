@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Raleway, Ramabhadra ,DM_Sans} from "next/font/google";
+import { Raleway, Ramabhadra, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/common/Navbar";
 import HeaderBar from "./components/common/HeaderBar";

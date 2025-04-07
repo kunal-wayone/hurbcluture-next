@@ -45,8 +45,8 @@ export default function Footer() {
   return (
     <footer className="text-gray-50 font-[raleway] bg-gray-50">
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row items-center justify-between mb-10 px-4 lg:p-16">
-          <h2 className="text-dark-primary text-3xl font-bold font-[ramabhadra] mb-4 lg:mb-0">
+        <div className="flex flex-col lg:flex-row items-center justify-between px-4 lg:px-16 lg:py-8 mb-10 lg:mb-0">
+          <h2 className="text-dark-primary text-2xl font-medium font-[ramabhadra] mb-4 lg:mb-0">
             Subscribe to our newsletter & get 20 % off
           </h2>
           <div className="flex items-center gap-4 w-full lg:w-2/5">
@@ -60,8 +60,8 @@ export default function Footer() {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mx-auto px-4 lg:p-16 mb-6 lg:mb-0">
-          <div className="w-full lg:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-4 mx-auto px-4 lg:p-16 lg:pt-8 mb-6 lg:mb-0">
+          <div className="w-full lg:col-span-3">
             <div className="mb-4">
               <Image
                 src="/assets/logo/logo.png"
@@ -72,7 +72,7 @@ export default function Footer() {
               />
             </div>
             <div>
-              <p className="font-[raleway] text-gray-600 tracking-wide text-sm/7 mt-4 mb-4">
+              <p className="font-[raleway] text-gray-500 tracking-wide text-sm/7 mt-4 mb-4">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
                 itaque repellat perspiciatis voluptate eius nihil ea deleniti,
                 hic similique accusamus laborum quidem totam unde quaerat error
@@ -113,6 +113,7 @@ export default function Footer() {
             </div>
           </div>
           <span className="hidden lg:block"></span>
+          <span className="hidden lg:block"></span>
           <div>
             <h3 className="mb-5 text-lg uppercase text-gray-800 font-semibold">
               Shop
@@ -121,7 +122,7 @@ export default function Footer() {
               {services &&
                 services?.map((item, index) => (
                   <li key={index}>
-                    <Link href={item.path} className="hover:text-gray-500">
+                    <Link href={item.path} className="text-gray-800 font-medium hover:text-gray-900">
                       {item.name}
                     </Link>
                   </li>
@@ -135,7 +136,7 @@ export default function Footer() {
               {company &&
                 company?.map((item, index) => (
                   <li key={index}>
-                    <Link href={item.url} className="hover:text-gray-500">
+                    <Link href={item.url} className="text-gray-800 font-medium hover:text-gray-900">
                       {item.name}
                     </Link>
                   </li>
@@ -151,7 +152,7 @@ export default function Footer() {
               {support &&
                 support?.map((item, index) => (
                   <li key={index}>
-                    <Link href={item.url} className="hover:text-gray-500">
+                    <Link href={item.url} className="text-gray-800 font-medium hover:text-gray-900">
                       {item.name}
                     </Link>
                   </li>
@@ -159,9 +160,10 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 bg-primary p-3">
+        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 bg-primary p-4 lg:px-16">
           <div className="text-gray-50">
-            © {new Date().getFullYear()} All rights reserved.
+            {/* © {new Date().getFullYear()}  */}
+            All rights reserved.
           </div>
           <div className="flex space-x-4 text-base mt-2 md:mt-0">
             <Link

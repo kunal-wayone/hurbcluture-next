@@ -587,7 +587,7 @@ const categoryCardData = {
   ],
 };
 
-const products: Product[] = [
+export const products: Product[] = [
   {
     id: 1,
     name: "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
@@ -680,7 +680,7 @@ const products: Product[] = [
   },
 ];
 
-const products2: Product[] = [
+export  const products2: Product[] = [
   {
     id: 1,
     name: "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
@@ -688,7 +688,7 @@ const products2: Product[] = [
     price: "3,53,39.00",
     rating: "4",
     review: "400k",
-    bestSeller: false,
+    bestSeller: true,
   },
   {
     id: 2,

@@ -44,7 +44,7 @@ const Navbar = () => {
   const handleLinkClick = () => setActiveSubmenuId(null);
 
   return (
-    <nav className="bg-white font-[raleway] flex justify-between pt-5 p-3 lg:px-20 lg:justify-between items-center absolute top-20 z-[99] w-full">
+    <nav className="bg-white font-[raleway] flex justify-between pt-5 p-3 lg:px-16 lg:justify-between items-center absolute top-20 z-[99] w-full">
       <div className=" flex justify-center items-center">
         <BiCategoryAlt className="text-3xl text-dark-primary" />
         <select
@@ -78,8 +78,7 @@ const Navbar = () => {
                     : "text-dark-primary hover:text-gray-100 transition duration-200"
                 }`}
                 onClick={(e) => {
-                  if (item.submenu)
-                     e.preventDefault(); // Prevent link navigation to enable click behavior
+                  if (item?.submenu) e.preventDefault(); // Prevent link navigation to enable click behavior
                   handleClick(item.name); // Toggle submenu on click
                 }}
               >
@@ -88,7 +87,7 @@ const Navbar = () => {
             </Link>
 
             {/* Submenu */}
-            {item.submenu && (
+            {item?.submenu && (
               <div
                 className={`absolute top-20 left-[-20rem] w-[60vw] mt-2 rounded-2xl bg-gray-50 text-dark-primary ${
                   activeSubmenuId === item.name ? "block" : "hidden"
@@ -96,7 +95,7 @@ const Navbar = () => {
                 onMouseLeave={handleMouseLeave} // Reset on mouse leave
               >
                 <ul className="space-y-2 p-2 grid grid-cols-1 lg:grid-cols-3">
-                  {item.submenu.map((subItem: any) => (
+                  {item?.submenu.map((subItem: any) => (
                     <li key={subItem.id}>
                       <Link
                         href={subItem.path}
