@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { BiUser, BiMap, BiPhone, BiEnvelope } from "react-icons/bi";
+import { BiUser , BiMap, BiPhone, BiEnvelope } from "react-icons/bi";
 
 interface Customer {
   orders?: {
