@@ -30,7 +30,26 @@ export default function page() {
               </div>
             </div>
 
-            <CartProduct />
+            <CartProduct
+              product={{
+                image: "/assets/featureproduct/f13.png",
+                title:
+                  "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
+                subtitle: "ANANDAMYDE SPECIAL INTRODUCTORY OFFER",
+                price: 12100,
+                originalPrice: 14100,
+                deliveryDate: "Fri Mar 14",
+              }}
+              showSubtitle={true}
+              showOriginalPrice={true}
+              showQuantity={true}
+              showRemoveOption={true}
+              showRate={false}
+              classNames={{
+                wrapper: "bg-white",
+                price: "text-green-600",
+              }}
+            />
 
             <Payment />
           </div>
@@ -68,7 +87,10 @@ export default function page() {
                 </div>
               </div>
 
-              <Link href={"/order-review"} className="cursor bg-primary p-2 px-10 text-gray-50 rounded-xl">
+              <Link
+                href={"/order-review"}
+                className="cursor bg-primary p-2 px-10 text-gray-50 rounded-xl"
+              >
                 Proceed to checkout
               </Link>
 
@@ -107,8 +129,7 @@ export default function page() {
                 <p className="text-xs w-4/5">
                   Use Code
                   <span className="text-primary mx-1"> FIRST ONE</span>
-                  
-                   on your first purchase to get 40% off
+                  on your first purchase to get 40% off
                 </p>
                 <button className="w-1/5 p-1 text-xs text-primary">
                   Apply

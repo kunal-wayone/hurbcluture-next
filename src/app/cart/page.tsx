@@ -28,9 +28,48 @@ export default function page() {
               </div>
             </div>
 
-            <CartProduct />
+            <CartProduct
+              product={{
+                image: "/assets/featureproduct/f13.png",
+                title:
+                  "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
+                subtitle: "ANANDAMYDE SPECIAL INTRODUCTORY OFFER",
+                price: 12100,
+                originalPrice: 14100,
+                deliveryDate: "Fri Mar 14",
+              }}
+              showSubtitle={true}
+              showOriginalPrice={true}
+              showQuantity={true}
+              showRemoveOption={true}
+              showRate={false}
+              classNames={{
+                wrapper: "bg-white",
+                price: "text-green-600",
+              }}
+            />
+
             <hr className="text-gray-200 border-[1px]" />
-            <CartProduct />
+            <CartProduct
+              product={{
+                image: "/assets/featureproduct/f13.png",
+                title:
+                  "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
+                subtitle: "ANANDAMYDE SPECIAL INTRODUCTORY OFFER",
+                price: 12100,
+                originalPrice: 14100,
+                deliveryDate: "Fri Mar 14",
+              }}
+              showSubtitle={true}
+              showOriginalPrice={true}
+              showQuantity={true}
+              showRemoveOption={true}
+              showRate={false}
+              classNames={{
+                wrapper: "bg-white",
+                price: "text-green-600",
+              }}
+            />
           </div>
 
           <div className="lg:col-span-2">
@@ -71,12 +110,16 @@ export default function page() {
                 </div>
               </div>
 
-              <Link href={"/order-summery"} className="bg-primary p-2 px-10 text-gray-50 rounded-xl">
+              <Link
+                href={"/order-summery"}
+                className="bg-primary p-2 px-10 text-gray-50 rounded-xl"
+              >
                 Proceed to checkout
               </Link>
 
               <span className="text-gray-400 font-semibold flex items-center gap-2 my-4 mx-auto text-center justify-center">
-               <RiSecurePaymentLine className="text-xl text-primary"  /> 100% Secure Payment
+                <RiSecurePaymentLine className="text-xl text-primary" /> 100%
+                Secure Payment
               </span>
             </div>
           </div>
