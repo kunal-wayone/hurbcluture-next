@@ -12,14 +12,14 @@ export default function Breadcrumbs({ paths = [] }) {
                 <>
                   <Link
                     href={path.href}
-                    className="hover:underline text-gray-500"
+                    className="hover:underline text-gray-500 capitalize"
                   >
                     {path.label}
                   </Link>
                  <span className="mx-1 text-gray-500">/</span>
                 </>
               ) : (
-                <span className="text-gray-500 font-medium">{path.label}</span>
+                <span className="text-gray-500 font-medium capitalize">{path.label}</span>
               )}
             </li>
           );

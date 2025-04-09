@@ -19,7 +19,8 @@ export default function Testimonials({ clients }: { clients: any[] }) {
         <Swiper
           spaceBetween={20}
           slidesPerView={3.5}
-          loop={false}
+          loop
+          speed={1200}
           grabCursor={true}
           pagination={false}
           navigation={false}

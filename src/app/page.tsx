@@ -30,15 +30,15 @@ interface Product {
 const heroSlides: ISlide[] = [
   {
     id: 1,
-    imageUrl: "/assets/banner/banner1.png", // Make sure to replace with your actual image paths
+    imageUrl: "/assets/banner/banner1.svg", // Make sure to replace with your actual image paths
     altText: "First Slide",
-    title: "Explore the World",
+    title: "Cannazo India",
     description:
       "Discover the beauty of nature and adventure in every corner of the globe.",
   },
   {
     id: 2,
-    imageUrl: "/assets/banner/banner2.png",
+    imageUrl: "/assets/banner/banner2.svg",
     altText: "Second Slide",
     title: "The Future of Technology",
     description:
@@ -46,7 +46,7 @@ const heroSlides: ISlide[] = [
   },
   {
     id: 3,
-    imageUrl: "/assets/banner/banner3.png",
+    imageUrl: "/assets/banner/banner3.svg",
     altText: "Third Slide",
     title: "Sustainability for Tomorrow",
     description:

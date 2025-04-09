@@ -203,7 +203,9 @@ export default function ProductSlider({
       </h2>
 
       <div
-        className={`${(useOfferBanner || useFilter) && "grid grid-cols-1 lg:grid-cols-5 "}`}
+        className={`${
+          (useOfferBanner || useFilter) && "grid grid-cols-1 lg:grid-cols-5 "
+        }`}
       >
         {useOfferBanner && (
           <div className="col-span-1 mb-8 lg:mb-0">
@@ -217,7 +219,7 @@ export default function ProductSlider({
           </div>
         )}
         {useFilter && (
-          <div className="col-span-1 mb-8 lg:mb-0 w-full max-w-xs p-4 bg-white">
+          <div className="col-span-1 mb-8 lg:mb-0 w-full max-w-xs p-4 hidden lg:block bg-white">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Filters</h2>
             {filterSections.map((section) => (
               <div key={section} className="mb-4 border-t pt-6 border-gray-300">

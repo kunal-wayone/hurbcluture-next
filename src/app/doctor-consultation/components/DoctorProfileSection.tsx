@@ -72,10 +72,14 @@ const doctors = [
   },
 ];
 
-export default function DoctorProfileSection() {
+export default function DoctorProfileSection({
+  title = "Doctors Profile",
+}: {
+  title?: string;
+}) {
   return (
     <div className="w-full max-w-7xl mx-auto">
-        <h3 className="text-xl font-bold mb-4">Doctors Profile</h3>
+      <h3 className="text-xl font-bold text-gray-800 mb-4">{title}</h3>
       <Swiper
         spaceBetween={20}
         slidesPerView={1}

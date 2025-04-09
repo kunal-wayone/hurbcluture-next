@@ -30,7 +30,7 @@ const DoctorProfileCard: React.FC<DoctorProfileProps> = ({
   return (
     <div className="border border-gray-200 shadow-md rounded-2xl p-4 w-full max-w-sm bg-gray-100 flex flex-col gap-2">
       {/* Top Section: Image + Info */}
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+      <div className="flex flex-row items-center md:items-start gap-6">
         {/* Doctor Image */}
         <div className="flex-shrink-0 w-32 h-32 rounded-full overflow-hidden">
           <Image
@@ -43,12 +43,12 @@ const DoctorProfileCard: React.FC<DoctorProfileProps> = ({
         </div>
 
         {/* Doctor Info */}
-        <div className="flex flex-col justify-center text-center md:text-left gap-1 w-full">
+        <div className="flex flex-col justify-center text-left gap-1 w-full">
           <h2 className="text-lg font-bold text-gray-800">{name}</h2>
           <p className="text-base text-gray-500 flex items-center gap-2"><IoMdBriefcase /> {experience}</p>
           <p className="text-base text-gray-500"> {specialty}</p>
           <p className="text-base text-gray-500"> {degree}</p>
-          <div className="flex justify-center md:justify-start items-center gap-1 mt-1">
+          <div className="flex justify-start items-center gap-1 mt-1">
             {[...Array(5)].map((_, i) => (
               <FaStar
                 key={i}
@@ -63,7 +63,7 @@ const DoctorProfileCard: React.FC<DoctorProfileProps> = ({
       </div>
 
       {/* Bottom Section: Price + Booking */}
-      <div className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4">
+      <div className="flex flex-row justify-between items-center pt-4 gap-4">
         <div className="text-center md:text-left">
           <p className="text-base font-semibold text-gray-800"> {timing}</p>
           <p className="text-2xl font-semibold text-gray-400">₹ {price}</p>

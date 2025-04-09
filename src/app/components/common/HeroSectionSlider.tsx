@@ -49,9 +49,10 @@ const HeroSection = ({ heroSlides }:PageProps) => {
                 alt={slide.altText}
                 className="object-cover w-full h-full"
               />
-              <div className="absolute hidden lg:block top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
-                <h2 className="text-4xl font-bold">{slide.title}</h2>
-                <p className="mt-4 text-lg">{slide.description}</p>
+              <div className="absolute top-0 bg-gradient-to-r from-black/50 to-black/0 w-full h-full z-10"></div>
+              <div className="absolute lg:block top-1/2 left-15 lg:left-20 z-20 w-full lg:w-1/2 transform -translate-y-1/2 text-white text-left">
+                <h2 className="text-2xl lg:text-7xl">{slide.title}</h2>
+                <p className="mt-1 lg:mt-4 font-semibold w-3/5 lg:w-4/5 lg:pl-2 text-xs lg:text-lg">{slide.description}</p>
               </div>
             </div>
           </SwiperSlide>
