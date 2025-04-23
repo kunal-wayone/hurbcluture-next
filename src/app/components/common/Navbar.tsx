@@ -2,13 +2,48 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { BiCategoryAlt, BiSolidOffer } from "react-icons/bi";
+import { Fetch } from "../../../hooks/apiutils";
+
+interface MenuItem {
+  name: string;
+  path: string;
+  submenu?: {
+    length?: number;
+    name: string;
+    path: string;
+  }[];
+}
 
 const Navbar = () => {
   const pathname = usePathname(); // Get current route
+  const route = useRouter();
+  const [category, setCategory] = useState([]);
   const [activeSubmenuId, setActiveSubmenuId] = useState<string | null>(null); // Track active submenu by ID
+
+  const getCategory = async () => {
+    try {
+      const response: any = await Fetch(
+        "/api/category",
+        undefined,
+        5000,
+        false
+      );
+      const data = response.data;
+      console.log(response);
+      if (!response.success) throw new Error("Failed to fetch categories");
+      setCategory(data?.result);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
 
   const handleMouseEnter = (submenuId: string) => {
     setActiveSubmenuId(submenuId); // Set the submenu as active on hover
@@ -26,15 +61,14 @@ const Navbar = () => {
   };
 
   // Define menuItems with submenus for "Services" and "Industries"
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     {
       name: "Contact",
       path: "/contact",
-      submenu: [],
     },
-    { name: "Blog", path: "/blog" },
+    { name: "Blog", path: "/blogs" },
     {
       name: "Doctor Consultation",
       path: "/doctor-consultation",
@@ -50,15 +84,21 @@ const Navbar = () => {
         <select
           name="category"
           id="Category"
-          className=" w-full font-[raleway] text-dark-primary outline-0"
+          onChange={(e: any) => {
+            route?.push(`/category?id=${e?.target?.value}`);
+            console.log(e?.target?.value);
+          }}
+          className="w-36 font-[raleway] text-dark-primary outline-0"
         >
           <option value="All">All Categories</option>
-          {[1, 2, 3, 4, 5].map((cat: any, index: any) => (
-            <option key={index} value={cat}>
-              {cat}
-            </option>
-          ))}
+          {category &&
+            category.map((cat: any, index: any) => (
+              <option key={index} value={cat?._id}>
+                {cat?.name}
+              </option>
+            ))}
         </select>
+
         <span className="h-6 ml-10 w-[1px] inline-block bg-gray-200"></span>
       </div>
 
@@ -87,7 +127,7 @@ const Navbar = () => {
             </Link>
 
             {/* Submenu */}
-            {item?.submenu && (
+            {item?.submenu  && (
               <div
                 className={`absolute top-20 left-[-20rem] w-[60vw] mt-2 rounded-2xl bg-gray-50 text-dark-primary ${
                   activeSubmenuId === item.name ? "block" : "hidden"

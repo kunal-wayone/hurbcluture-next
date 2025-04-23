@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,8 +8,43 @@ import { Navigation, Pagination } from "swiper/modules";
 import Link from "next/link";
 import { IoStar, IoStarOutline } from "react-icons/io5";
 import Image from "next/image";
+import { Fetch } from "../../../hooks/apiutils";
 
-export default function Testimonials({ clients }: { clients: any[] }) {
+export default function Testimonials() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [testimonialsData, setTestimonialsData] = useState([]);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setIsLoading(true);
+      try {
+        const response = await Fetch(
+          "/api/testimonial",
+          undefined,
+          5000,
+          false
+        );
+        const data: any = response;
+        if (data.success) {
+          setTestimonialsData(data.data.result);
+          console.log(data?.data.result);
+        }
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading testimonials...</div>;
+  }
+  if (testimonialsData?.length === 0) {
+    return null;
+  }
+
   return (
     <div className="max-w-7xl m-auto p-4 lg:px-16 hover:cursor-pointer">
       <h2 className="text-dark-primary text-xl font-bold font-[raleway] mb-4">
@@ -30,59 +65,58 @@ export default function Testimonials({ clients }: { clients: any[] }) {
             768: { slidesPerView: 3.5 },
           }}
         >
-          {clients?.map((client, index) => (
-            <SwiperSlide
-              key={client.id || index}
-              className="flex justify-center"
-            >
-              <Link href="/" className="text-base font-medium px-4">
-                <div className="border-[1.5px]  shadow-md border-gray-300 rounded-lg p-4 flex flex-col justify-center">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h2 className="text-base mb-2 text-gray-800 font-semibold">{client?.name}</h2>
-                      <span className="flex gap-2">
-                        {Array(client?.stars || 4)
-                          .fill(null)
-                          .map((_, index) => (
-                            <IoStar
-                              key={index}
-                              className="text-xl text-yellow-500"
-                            />
-                          ))}
-                        {Array(5 - (client?.stars || 4))
-                          .fill(null)
-                          .map((_, index) => (
-                            <IoStarOutline
-                              key={index}
-                              className="text-xl text-gray-600"
-                            />
-                          ))}
-                      </span>
+          {testimonialsData?.length !== 0 &&
+            testimonialsData?.map((client, index) => (
+              <SwiperSlide
+                key={client.id || index}
+                className="flex justify-center"
+              >
+                <Link href="/" className="text-base font-medium px-4">
+                  <div className="border-[1.5px]  shadow-md border-gray-300 rounded-lg p-4 flex flex-col justify-center">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h2 className="text-base mb-2 text-gray-800 font-semibold">
+                          {client?.name}
+                        </h2>
+                        <span className="flex gap-2">
+                          {Array(client?.rating || 4)
+                            .fill(null)
+                            .map((_, index) => (
+                              <IoStar
+                                key={index}
+                                className="text-xl text-yellow-500"
+                              />
+                            ))}
+                          {Array(5 - (client?.rating || 4))
+                            .fill(null)
+                            .map((_, index) => (
+                              <IoStarOutline
+                                key={index}
+                                className="text-xl text-gray-600"
+                              />
+                            ))}
+                        </span>
+                      </div>
+                      <div>
+                        {client?.image && (
+                          <Image
+                            src={client?.image}
+                            alt={client?.name}
+                            width={64}
+                            height={64}
+                            className="rounded-full h-14 w-14 m-auto"
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      {client?.image && (
-                        <Image
-                          src={client.image}
-                          alt={client.name}
-                          width={64}
-                          height={64}
-                          className="rounded-full h-14 w-14 m-auto"
-                        />
-                      )}
-                    </div>
+                    <hr className="mb-4" />
+                    <p className="text-secondary  text-base mb-4">
+                      {client?.review}
+                    </p>
                   </div>
-                  <hr className="mb-4" />
-                  <p className="text-secondary  text-base mb-4">
-                    It is a long established fact that a reader will be
-                    distracted by the readable content of a page when looking at
-                    its layout. The point of using Lorem Ipsum is that it has a
-                    more-or-less normal distribution of letters, as opposed to
-                    using &apos;Content.
-                  </p>
-                </div>
-              </Link>
-            </SwiperSlide>
-          ))}
+                </Link>
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>

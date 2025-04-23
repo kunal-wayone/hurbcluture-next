@@ -76,7 +76,7 @@ body {
 .bagde-flag-wrap {
   position: absolute;
   top: 0px;
-  right: 0px;
+  /* right: 0px; */
   
 }
 
@@ -89,7 +89,7 @@ body {
   height: 0;
   z-index: -1;
   border-style: solid;
-  border-width: 0px 0px 15px 15px;
+  /* border-width: 0px 0px 15px 15px; */
   border-color: transparent transparent transparent var(--primary)  ;
 }
 

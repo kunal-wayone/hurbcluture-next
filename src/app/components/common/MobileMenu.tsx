@@ -62,7 +62,7 @@ const Sidebar = () => {
                 height={50}
                 unoptimized
                 priority
-                alt="Above All Agency"
+                alt="The Herb Culture"
                 className="w-2/4"
               />
             </Link>

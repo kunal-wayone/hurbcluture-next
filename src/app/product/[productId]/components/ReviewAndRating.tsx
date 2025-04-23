@@ -1,20 +1,28 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+
 import React, { useState } from "react";
 import { CiImageOn } from "react-icons/ci";
-import { IoMdArrowDropdown } from "react-icons/io";
 import { IoStar, IoStarOutline } from "react-icons/io5";
+import ReviewModal from "../../../components/ReviewModal";
+import ReviewList from "./ReviewList";
 
 export default function ReviewAndRating() {
-  const [reviewNo, setReviewNo] = useState(2);
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="p-4 lg:px-16 m-auto max-w-7xl">
       <div className="w-full flex justify-between mb-4">
         <h2 className="text-dark-primary lg:text-2xl font-bold font-[raleway]">
           Customer Review and Rating
         </h2>
-        <button className="rounded-2xl  text-xs lg:text-base py-1 lg:py-2 px-4 lg:px-8 text-secondary border border-gray-500">
+        <button
+          onClick={() => setShowModal(true)}
+          className="rounded-2xl text-xs lg:text-base py-1 lg:py-2 px-4 lg:px-8 
+             text-primary border border-primary 
+             hover:bg-primary hover:scale-105 hover:text-white
+             active:scale-95 
+             transition-all duration-300 ease-in-out shadow-md"
+        >
           Add Review
         </button>
       </div>
@@ -88,76 +96,15 @@ export default function ReviewAndRating() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {Array(reviewNo)
-          .fill(0)
-          .map((_, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="mb-8"
-            >
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
-                <div className="flex items-center gap-6 mb-2 lg:mb-0">
-                  <div>
-                    <Image
-                      src={"/assets/logo/logo.png"}
-                      alt={"image"}
-                      width={100}
-                      height={100}
-                      className={"w-10 h-10 object-cover rounded-full"}
-                    />
-                  </div>
-                  <h3 className="text-base lg:text-2xl font-medium">Alexender Billy</h3>
-                  <p>2 month ago</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-xl">4.0</span>
-                  <span className="flex items-center gap-1">
-                    {Array(4)
-                      .fill(0)
-                      .map((_, index) => (
-                        <IoStar
-                          key={index}
-                          className="text-base text-yellow-500"
-                        />
-                      ))}
-                    {Array(5 - 4)
-                      .fill(0)
-                      .map((_, index) => (
-                        <IoStarOutline
-                          key={index}
-                          className="text-base text-gray-400"
-                        />
-                      ))}
-                  </span>
-                </div>
-              </div>
-              <p className=" text-sm mb-8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry&apos;s standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting.
-              </p>
-              <hr className="w-4/5" />
-            </motion.div>
-          ))}
-      </AnimatePresence>
+      <ReviewList />
 
-      <div>
-        <span
-          className="flex items-center font-medium text-primary cursor-pointer"
-          onClick={() => setReviewNo(reviewNo === 2 ? 5 : 2)}
-        >
-          View All Review
-          <IoMdArrowDropdown className="text-2xl" />
-        </span>
-      </div>
+      {showModal && (
+        <ReviewModal
+          userId="6805d43bc3c1622e72674296"
+          productId="67f773a589af34040da784c5"
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

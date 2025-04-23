@@ -137,13 +137,13 @@ export default async function page(ctx: any) {
         products={products2}
         viewCard={5}
         cardSize={""}
-        containerClass={"bg-white py-8"}
+        containerClass={"bg-white p-4 lg:px-16 py-8"}
         cardClassName={{
           card: "",
           image: "",
           bestSeller: "h-8 w-16 text-[10px]",
           content: { box: "", title: "", text: "text-xs" },
-          price: { show: false, text: "" },
+          price: { hide: false, text: "" },
         }}
         useSlider={true}
         useCategorySlider={true}
@@ -155,13 +155,13 @@ export default async function page(ctx: any) {
         products={products2}
         viewCard={5}
         cardSize={""}
-        containerClass={"bg-white py-8"}
+        containerClass={"bg-white p-4 lg:px-16 py-8"}
         cardClassName={{
           card: "",
           image: "",
           bestSeller: "h-8 w-16 text-[10px]",
           content: { box: "", title: "", text: "text-xs" },
-          price: { show: false, text: "" },
+          price: { hide: false, text: "" },
         }}
         useSlider={true}
         useCategorySlider={true}

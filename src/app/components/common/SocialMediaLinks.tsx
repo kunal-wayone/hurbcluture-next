@@ -9,7 +9,7 @@ import {
 const SocialMediaLinks = ({ size }: { size?: number }) => {
   const socialLinks = [
     {
-      href: "https://www.instagram.com/aboveallagency1/",
+      href: "https://www.instagram.com/",
       icon: (
         <FaInstagram
           size={size ?? 20}
@@ -19,7 +19,7 @@ const SocialMediaLinks = ({ size }: { size?: number }) => {
       label: "Instagram",
     },
     {
-      href: "https://www.facebook.com/people/aboveallagency/61560059016993/",
+      href: "https://www.facebook.com/",
       icon: (
         <FaFacebook
           size={size ?? 20}
@@ -39,7 +39,7 @@ const SocialMediaLinks = ({ size }: { size?: number }) => {
     //   label: "Twitter",
     // },
     {
-      href: "https://www.linkedin.com/company/aboveallagency/?viewAsMember=true",
+      href: "https://www.linkedin.com/",
       icon: (
         <FaLinkedinIn
           size={size ?? 20}
@@ -49,7 +49,7 @@ const SocialMediaLinks = ({ size }: { size?: number }) => {
       label: "LinkedIn",
     },
     {
-      href: "https://in.pinterest.com/aboveallagency/",
+      href: "https://in.pinterest.com/",
       icon: (
         <FaPinterest
           size={size ?? 20}

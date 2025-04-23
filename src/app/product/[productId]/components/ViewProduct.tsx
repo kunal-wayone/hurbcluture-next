@@ -7,11 +7,17 @@ import { Product } from "../page";
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [, setHoveredImage] = useState<string | null>(null);
-  const [mainImage, setMainImage] = useState(product.mainImage);
+  const [mainImage, setMainImage] = useState(product?.coverImage);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [isZooming, setIsZooming] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const mainImageRef = useRef<HTMLDivElement>(null);
+  const [imgError, setImgError] = useState(false);
+
+  const handleError = () => {
+    setImgError(true);
+  };
+
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = mainImageRef.current?.getBoundingClientRect();
@@ -34,7 +40,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className="flex flex-col-reverse lg:flex-row gap-4 mb-8">
             {/* Thumbnails */}
             <div className="lg:w-1/5 flex flex-row lg:flex-col items-center gap-2">
-              {product.images.map((img, i) => (
+              {[
+                product?.image1,
+                product?.image2,
+                product?.image3,
+                product?.image4,
+              ]?.map((img, i) => (
                 <div
                   key={i}
                   onMouseEnter={() => setHoveredImage(img)}
@@ -50,7 +61,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     alt={`Thumbnail ${i}`}
                     width={1680}
                     height={1080}
-                    src={img}
+                    src={
+                      imgError || !img
+                        ? "/assets/products/product1.svg"
+                        : `/api/image?url=${img}`
+                    }
+                    onError={handleError}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -66,11 +82,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
               ref={mainImageRef}
             >
               <Image
-                alt="Main Product"
-                src={mainImage}
+                src={
+                  imgError || !mainImage
+                    ? "/assets/products/product1.svg"
+                    : `/api/image?url=${mainImage}`
+                }
+                alt="Zoomed"
                 width={800}
                 height={800}
+                unoptimized
                 className="w-full h-full object-cover"
+                onError={handleError}
               />
               {/* Optional overlay */}
               {isZooming && (
@@ -83,10 +105,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <div className="hidden lg:block absolute top-[calc(100%-105%)] left-[calc(100%-50%)] z-50 w-2/5 h-[90vh] max-h-[700px] border border-gray-300 rounded-xl overflow-hidden bg-white shadow-xl">
                 <div className="relative w-full h-full">
                   <Image
-                    src={mainImage}
+                    src={
+                      imgError || !mainImage
+                        ? "/assets/products/product1.svg"
+                        : `/api/image?url=${mainImage}`
+                    }
                     alt="Zoomed"
-                    fill
+                    width={900}
+                    height={900}
+                    unoptimized
                     className="object-cover"
+                    onError={handleError}
                     style={{
                       transform: `scale(2) translate(-${zoomPosition.x}%, -${zoomPosition.y}%)`,
                       transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
@@ -155,28 +184,30 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
         {/* Right Column */}
         <div className="col-span-4 self-start space-y-4">
-          <h2 className="text-xl font-bold">{product.name}</h2>
-          <p className="text-gray-600">{product.description}</p>
+          <h2 className="text-xl font-bold">{product?.name}</h2>
+          <p className="text-gray-600">{product?.description}</p>
 
           <div className="flex items-center gap-2">
             <span className="bg-primary text-white p-2 rounded flex items-center gap-1">
-              {product.rating} <IoStar className="text-sm" />
+              {product?.rating ?? "NA"} <IoStar className="text-sm" />
             </span>
-            <span className="text-secondary text-xs">{product.ratingInfo}</span>
+            <span className="text-secondary text-xs">
+              {product?.ratingInfo ?? "NA"}
+            </span>
           </div>
 
           <div>
             <span className="text-xl font-semibold">
-              ₹{product.price.toLocaleString()}
+              ₹{product?.price.toLocaleString() ?? "NA"}
             </span>
             <span className="text-gray-400 line-through ml-2">
-              ₹{product.originalPrice.toLocaleString()}
+              ₹{product?.discountedPrice.toLocaleString() ?? "NA"}
             </span>
           </div>
 
           <div>
             <h3 className="font-semibold mb-1">Offers</h3>
-            {product.offers.map((offer, i) => (
+            {product?.offers?.map((offer, i) => (
               <div
                 key={i}
                 className="flex items-center text-secondary gap-2 mt-1"
@@ -187,7 +218,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   width={16}
                   height={16}
                 />
-                <b className="text-dark-primary text-sm hidden lg:block">Special Price</b>
+                <b className="text-dark-primary text-sm hidden lg:block">
+                  Special Price
+                </b>
                 <span className="text-sm">{offer}</span>
               </div>
             ))}
@@ -239,8 +272,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div>
             <h3 className="text-base font-semibold">Product Details</h3>
             <ul className="list-disc pl-5 text-gray-600">
-              {product.details.map((item, i) => (
-                <li key={i} className="text-sm">{item}</li>
+              {product?.details?.map((item, i) => (
+                <li key={i} className="text-sm">
+                  {item}
+                </li>
               ))}
             </ul>
           </div>
@@ -248,15 +283,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div>
             <h3 className="text-base font-semibold">Nutrition Value</h3>
             <ul className="list-disc pl-5 text-gray-600">
-              {product.nutrition.map((item, i) => (
-                <li key={i} className="text-sm">{item}</li>
+              {product?.nutrition?.map((item, i) => (
+                <li key={i} className="text-sm">
+                  {item}
+                </li>
               ))}
             </ul>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold">Product Description</h3>
-            <p className="text-gray-500 text-sm">{product.additionalInfo}</p>
+            <p className="text-gray-500 text-sm">{product?.additionalInfo}</p>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import Navbar from "./components/common/Navbar";
 import HeaderBar from "./components/common/HeaderBar";
 import React from "react";
 import Footer from "./components/common/Footer";
+import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "../context/AuthContext";
 
 // Raleway font configuration
 const raleway = Raleway({
@@ -43,10 +45,19 @@ export default function RootLayout({
       <body
         className={`${raleway.variable} ${ramabhadra.variable} ${dmSans.variable} antialiased font-[raleway]`}
       >
-        <HeaderBar />
-        <Navbar />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <HeaderBar />
+          <Navbar />
+          {children}
+          <ToastContainer
+            rtl={false}
+            autoClose={2000}
+            newestOnTop={true}
+            position="top-right"
+            hideProgressBar={false}
+          />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

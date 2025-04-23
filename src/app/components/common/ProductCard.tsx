@@ -17,7 +17,11 @@ export default function ProductCard({ product, cardSize, cardClassName }) {
           <Image
             width={1650}
             height={900}
-            src={product?.image}
+            src={
+              product?.coverImage
+                ? `/api/image?url=${product?.coverImage}`
+                : "/assets/products/product1-1.svg"
+            }
             alt={product?.title || ""}
             className="object-cover rounded-lg w-full h-full"
           />
@@ -27,7 +31,7 @@ export default function ProductCard({ product, cardSize, cardClassName }) {
             //   cardClassName?.bestSeller || "h-9 w-20"
             // }  top-0 right-0 bg-[#5BB35B]`}
             >
-              <div className="bagde-flag-wrap">
+              <div className="bagde-flag-wrap z-[200] right-[-6px] before:border-l-[6px] before:border-b-[6px] lg:before:border-l-[9px] lg:before:border-b-[10px]  lg:right-0">
                 <p className="bagde-flag">{"Best Seller"}</p>
               </div>
             </span>
@@ -40,14 +44,14 @@ export default function ProductCard({ product, cardSize, cardClassName }) {
           } ${cardSize} m-auto`}
         >
           <h2
-            className={` text-left font-semibold ${
+            className={` text-left font-semibold line-clamp-2 ${
               cardClassName?.content?.title || "text-lg lg:text-sm"
             }`}
           >
             {product?.name}
           </h2>
           <p
-            className={`mt-4  flex items-center justify-between  ${
+            className={`mt-4  flex items-center justify-between line-clamp-2  ${
               cardClassName?.content?.text || "text-lg gap-4"
             } `}
           >
@@ -85,13 +89,13 @@ export default function ProductCard({ product, cardSize, cardClassName }) {
           <p className="text-left text-lg lg:text-sm lowercase mb-1">
             {product?.bought || "2k Bouught last Month"}
           </p>
-          {cardClassName?.price?.show ? null : (
+          {cardClassName?.price?.hide ? null : (
             <p
               className={`${
                 cardClassName?.price?.text || "text-left text-xl lg:text-base"
               }`}
             >
-              ₹{product?.price}
+              ₹{product?.discountedPrice} <span className="text-xs text-gray-400 line-through ml-2"> ₹{product?.price}</span>
             </p>
           )}
         </div>

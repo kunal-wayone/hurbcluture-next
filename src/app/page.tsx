@@ -5,6 +5,7 @@ import React from "react";
 import ProductSlider from "./components/common/ProductSlider";
 import NewLaunchSlider from "./components/common/NewLaunchSlider";
 import Testimonials from "./components/common/Testimonials";
+import { fetchHomeData } from "../utils/server";
 
 interface ISlide {
   id: number;
@@ -443,7 +444,7 @@ const featureProductData2 = [
   },
 ];
 
-const categoryCardData = {
+export const categoryCardData = {
   title: "Up to 45% off • Get today",
   content: [
     {
@@ -680,7 +681,7 @@ export const products: Product[] = [
   },
 ];
 
-export  const products2: Product[] = [
+export const products2: Product[] = [
   {
     id: 1,
     name: "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
@@ -773,53 +774,56 @@ export  const products2: Product[] = [
   },
 ];
 
+// const clients = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     stars: 5,
+//     image: "/assets/profile.png",
+//   },
+//   {
+//     id: 2,
+//     name: "Jane Smith",
+//     stars: 4,
+//     image: "/assets/profile.png",
+//   },
+//   {
+//     id: 3,
+//     name: "Michael Johnson",
+//     stars: 3,
+//     image: "/assets/profile.png",
+//   },
+//   {
+//     id: 4,
+//     name: "Emily Davis",
+//     stars: 5,
+//     image: "/assets/profile.png",
+//   },
+//   {
+//     id: 5,
+//     name: "Chris Brown",
+//     stars: 4,
+//     image: "/assets/profile.png",
+//   },
+//   {
+//     id: 6,
+//     name: "Sarah Wilson",
+//     stars: 5,
+//     image: "/assets/profile.png",
+//   },
+// ];
 
-const clients = [
-  {
-    id: 1,
-    name: "John Doe",
-    stars: 5,
-    image: "/assets/profile.png",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    stars: 4,
-    image: "/assets/profile.png",
-  },
-  {
-    id: 3,
-    name: "Michael Johnson",
-    stars: 3,
-    image: "/assets/profile.png",
-  },
-  {
-    id: 4,
-    name: "Emily Davis",
-    stars: 5,
-    image: "/assets/profile.png",
-  },
-  {
-    id: 5,
-    name: "Chris Brown",
-    stars: 4,
-    image: "/assets/profile.png",
-  },
-  {
-    id: 6,
-    name: "Sarah Wilson",
-    stars: 5,
-    image: "/assets/profile.png",
-  },
-];
-
-export default function Home() {
+const Home = async () => {
+  const { loading, productData, categoryData }: any = await fetchHomeData();
+  console.log(loading, productData, categoryData);
   return (
     <div className="mt-[9.6rem]">
-      <HeroSection heroSlides={heroSlides} />
+      <HeroSection />
       <div className="bg-white">
         <FeatureProductSection scale={true} data={featureProductData} />
-        <BrowseCategory title={"Browse Category"} data={categoryCardData} />
+        {categoryData?.length != 0 && (
+          <BrowseCategory title={"Browse Category"} data={categoryData} />
+        )}
         <ProductSlider
           title={"Related to items you’ve viewed"}
           products={products}
@@ -835,13 +839,13 @@ export default function Home() {
             products={products2}
             viewCard={6}
             cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] py-8"}
+            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
             cardClassName={{
               card: "",
               image: "",
               bestSeller: "h-8 w-16 text-[10px]",
               content: { box: "", title: "", text: "text-xs" },
-              price: { show: false, text: "" },
+              price: { hide: false, text: "" },
             }}
             useSlider={true}
             useCategorySlider={false}
@@ -852,13 +856,13 @@ export default function Home() {
           products={products2}
           viewCard={5}
           cardSize={""}
-          containerClass={"bg-white py-8"}
+          containerClass={"bg-white p-4 lg:px-16 py-8"}
           cardClassName={{
             card: "",
             image: "",
             bestSeller: "h-8 w-16 text-[10px]",
             content: { box: "", title: "", text: "text-xs" },
-            price: { show: false, text: "" },
+            price: { hide: false, text: "" },
           }}
           useSlider={true}
           useCategorySlider={true}
@@ -887,13 +891,13 @@ export default function Home() {
           products={products2}
           viewCard={4}
           cardSize={""}
-          containerClass={"bg-white py-8"}
+          containerClass={"bg-white p-4 lg:px-16 py-8"}
           cardClassName={{
             card: "",
             image: "",
             bestSeller: "h-8 w-16 text-[10px]",
             content: { box: "", title: "", text: "text-xs" },
-            price: { show: false, text: "" },
+            price: { hide: false, text: "" },
           }}
           useSlider={true}
           useCategorySlider={false}
@@ -907,13 +911,13 @@ export default function Home() {
           products={products2}
           viewCard={6}
           cardSize={"lg:h-32"}
-          containerClass={"py-8"}
+          containerClass={"p-4 lg:px-16 py-8"}
           cardClassName={{
             card: "",
             image: "",
             bestSeller: "h-8 w-16 text-[10px]",
             content: { box: "", title: "", text: "text-xs" },
-            price: { show: false, text: "" },
+            price: { hide: false, text: "" },
           }}
           useSlider={true}
           useCategorySlider={false}
@@ -926,13 +930,13 @@ export default function Home() {
             products={products2}
             viewCard={6}
             cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] py-8"}
+            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
             cardClassName={{
               card: "",
               image: "",
               bestSeller: "h-8 w-16 text-[10px]",
               content: { box: "", title: "", text: "text-xs" },
-              price: { show: false, text: "" },
+              price: { hide: false, text: "" },
             }}
             useSlider={true}
             useCategorySlider={false}
@@ -944,13 +948,13 @@ export default function Home() {
           products={products2}
           viewCard={6}
           cardSize={"lg:h-32"}
-          containerClass={"py-8"}
+          containerClass={"p-4 lg:px-16 py-8"}
           cardClassName={{
             card: "",
             image: "",
             bestSeller: "h-8 w-16 text-[10px]",
             content: { box: "", title: "", text: "text-xs" },
-            price: { show: false, text: "" },
+            price: { hide: false, text: "" },
           }}
           useSlider={true}
           useCategorySlider={true}
@@ -991,13 +995,13 @@ export default function Home() {
             products={products2}
             viewCard={6}
             cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] py-8"}
+            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
             cardClassName={{
               card: "",
               image: "",
               bestSeller: "h-8 w-16 text-[10px]",
               content: { box: "", title: "", text: "text-xs" },
-              price: { show: false, text: "" },
+              price: { hide: false, text: "" },
             }}
             useSlider={true}
             useCategorySlider={false}
@@ -1009,13 +1013,13 @@ export default function Home() {
             products={products2}
             viewCard={6}
             cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] py-8"}
+            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
             cardClassName={{
               card: "",
               image: "",
               bestSeller: "h-8 w-16 text-[10px]",
               content: { box: "", title: "", text: "text-xs" },
-              price: { show: false, text: "" },
+              price: { hide: false, text: "" },
             }}
             useSlider={true}
             useCategorySlider={false}
@@ -1031,8 +1035,9 @@ export default function Home() {
           useCategorySlider={false}
         />
 
-        <Testimonials clients={clients} />
+        <Testimonials  />
       </div>
     </div>
   );
-}
+};
+export default Home;

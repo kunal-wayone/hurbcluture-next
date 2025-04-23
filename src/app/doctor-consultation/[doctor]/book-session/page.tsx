@@ -1,10 +1,15 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Breadcrumbs from "../../../components/common/BreadCrumb";
 import { IoMdBriefcase, IoMdCheckmark } from "react-icons/io";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
+import Session from "./components/Session";
+import ProductSlider from "../../../components/common/ProductSlider";
+import { products2 } from "../../../page";
 import BookingComponent from "./components/BookingComponent";
-export default function page() {
+export default function Page() {
+  const [booked, setBooked] = useState(false);
   const path = [
     { label: "Home", href: "/" },
     { label: "Doctor Consultation", href: `/doctor-consultation` },
@@ -24,33 +29,37 @@ export default function page() {
               height={900}
               className="h-60 w-64 m-auto object-contain mb-8 rounded-2xl"
             />
-
-            <div className="flex flex-row md:flex-col justify-between md:justify-start items-start pt-4 gap-4 mb-8">
-              <div className="text-left">
-                <p className="text-base font-semibold text-gray-800">
-                  {"1 Session x 60 Min"}
-                </p>
-                <p className="text-2xl font-medium text-gray-800">₹ {"900"}</p>
-              </div>
-              <button
-                // onClick={()=>console.log("Book Session")}
-                className="bg-primary hover:bg-primary/90 transition text-white px-8 py-3 rounded-xl text-sm font-medium"
-              >
-                Book a Session
-              </button>
-            </div>
-
-            <p className="text-xl font-medium text-gray-800">Language</p>
-            <div className="flex items-center gap-4 py-4">
-              <p className="text-sm bg-[#E4FFE4] text-primary w-full text-center rounded-lg p-2 px-8 text-gray-500">
-                {"English"}
-              </p>
-              <p className="text-sm bg-[#E4FFE4] text-primary w-full text-center rounded-lg p-2 px-8 text-gray-500">
-                {"Hindi"}
-              </p>
-            </div>
+            {!booked && (
+              <>
+                <div className="flex flex-row md:flex-col justify-between md:justify-start items-start pt-4 gap-4 mb-8">
+                  <div className="text-left">
+                    <p className="text-base font-semibold text-gray-800">
+                      {"1 Session x 60 Min"}
+                    </p>
+                    <p className="text-2xl font-medium text-gray-800">
+                      ₹ {"900"}
+                    </p>
+                  </div>
+                  <button
+                    onClick={()=>setBooked(true)}
+                    className="bg-primary hover:bg-primary/90 transition text-white px-8 py-3 rounded-xl text-sm font-medium"
+                  >
+                    Book a Session
+                  </button>
+                </div>
+                <p className="text-xl font-medium text-gray-800">Language</p>
+                <div className="flex items-center gap-4 py-4">
+                  <p className="text-sm bg-[#E4FFE4] text-primary w-full text-center rounded-lg p-2 px-8 text-gray-500">
+                    {"English"}
+                  </p>
+                  <p className="text-sm bg-[#E4FFE4] text-primary w-full text-center rounded-lg p-2 px-8 text-gray-500">
+                    {"Hindi"}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
-          <div className="w-full lg:w-4/5">
+          <div className="w-full lg:w-4/5 mb-4 lg-mb-0">
             <div className="flex flex-col justify-center md:text-left gap-1 ">
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">
                 {"Dr. Satish Verma"}
@@ -98,36 +107,86 @@ export default function page() {
                 one of the more obscure Latin words, consectetur, from a Lorem
                 Ipsum passage, and going through the cites of the word in
                 classical literature, discovered the undoubtable source. Lorem
-                Ipsum comes from sections 1.10.32 and 1.10.33 of &quot;de Finibus
-                Bonorum et Malorum.
+                Ipsum comes from sections 1.10.32 and 1.10.33 of &quot;de
+                Finibus Bonorum et Malorum.
               </p>
             </div>
-            <div className="py-4 md:p-4 md:px-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                {"Package Include:"}
-              </h2>
-              {Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <div key={index} className="flex items-center gap-4 mb-4">
-                    <span className="rounded-full p-1 flex itece justify-center bg-[#5BB35B69]/80">
-                      <IoMdCheckmark className="text-primary" />{" "}
-                    </span>
-                    <p className="text-gray-500">
-                      Contrary to popular belief, Lorem Ipsum is not simply
-                      random text. It has roots in a piece of classical Latin
-                      literature from 45 BC, making it over 2000 years old.
-                      Richard McClintock,
-                    </p>
-                  </div>
-                ))}
-            </div>
+            {!booked && (
+              <div className="py-4 md:p-4 md:px-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                  {"Package Include:"}
+                </h2>
+                {Array(4)
+                  .fill(0)
+                  .map((_, index) => (
+                    <div key={index} className="flex items-center gap-4 mb-4">
+                      <span className="rounded-full p-1 flex itece justify-center bg-[#5BB35B69]/80">
+                        <IoMdCheckmark className="text-primary" />{" "}
+                      </span>
+                      <p className="text-gray-500">
+                        Contrary to popular belief, Lorem Ipsum is not simply
+                        random text. It has roots in a piece of classical Latin
+                        literature from 45 BC, making it over 2000 years old.
+                        Richard McClintock,
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
 
-        <div>
-          <BookingComponent />
-        </div>
+        {!booked && (
+          <div>
+            <BookingComponent />
+          </div>
+        )}
+
+        {booked && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Session />
+
+            <div className="rounded-2xl p-4 bg-gray-100">
+              <ProductSlider
+                title={"Prescribed Medicine"}
+                products={products2}
+                viewCard={3}
+                cardSize={"lg:h-full"}
+                containerClass={"p-0 lg:px-0"}
+                cardClassName={{
+                  card: "",
+                  image: "",
+                  bestSeller: "h-8 w-16 text-[10px]",
+                  content: { box: "", title: "", text: "text-xs" },
+                  price: { hide: true, text: "" },
+                }}
+                useSlider={true}
+                useCategorySlider={false}
+                categories={[]}
+              />
+            </div>
+          </div>
+        )}
+
+        {booked && (
+          <ProductSlider
+            title={"Doctors Recommended"}
+            products={products2}
+            viewCard={5}
+            cardSize={"lg:h-full"}
+            containerClass={"p-4 lg:px-0 lg:py-8"}
+            cardClassName={{
+              card: "",
+              image: "",
+              bestSeller: "h-8 w-16 text-[10px]",
+              content: { box: "", title: "", text: "text-xs" },
+              price: { hide: true, text: "" },
+            }}
+            useSlider={true}
+            useCategorySlider={false}
+            categories={[]}
+          />
+        )}
       </div>
     </div>
   );

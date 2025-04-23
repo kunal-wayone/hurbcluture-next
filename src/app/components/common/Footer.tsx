@@ -67,7 +67,7 @@ export default function Footer() {
                 src="/assets/logo/logo.png"
                 width={200}
                 height={70}
-                alt="Above All Agency"
+                alt="The Herb Culture"
                 className="w-40 h-18"
               />
             </div>
@@ -81,7 +81,7 @@ export default function Footer() {
               <p className="flex items-center gap-4 ">
                 <Link
                   href={
-                    "https://www.facebook.com/profile.php?id=61567180822428"
+                    "https://www.facebook.com/"
                   }
                   title="facebook"
                 >
@@ -89,7 +89,7 @@ export default function Footer() {
                 </Link>
                 <Link
                   href={
-                    "https://www.facebook.com/profile.php?id=61567180822428"
+                    "https://www.facebook.com/"
                   }
                   title="facebook"
                 >
@@ -97,14 +97,14 @@ export default function Footer() {
                 </Link>
                 <Link
                   href={
-                    "https://www.facebook.com/profile.php?id=61567180822428"
+                    "https://www.facebook.com/"
                   }
                   title="facebook"
                 >
                   <FaFacebook className="text-3xl text-gray-500" />
                 </Link>
                 <Link
-                  href={"https://www.instagram.com/aboveallagency"}
+                  href={"https://www.instagram.com/"}
                   title="instagram"
                 >
                   <CiTwitter className="text-3xl text-gray-500" />

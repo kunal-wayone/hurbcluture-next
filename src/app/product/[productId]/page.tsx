@@ -3,32 +3,58 @@ import Breadcrumbs from "../../components/common/BreadCrumb";
 import ProductSlider from "../../components/common/ProductSlider";
 import { products } from "../../page";
 import ReviewAndRating from "./components/ReviewAndRating";
+import { getData } from "../../../utils/server";
 
-
+// export interface Product {
+//   name: string;
+//   description: string;
+//   price: number;
+//   originalPrice: number;
+//   rating: number;
+//   ratingInfo: string;
+//   mainImage: string;
+//   images: string[];
+//   offers: string[];
+//   nutrition: string[];
+//   details: string[];
+//   additionalInfo: string;
+// }
 
 export interface Product {
-  name: string;
-  description: string;
-  price: number;
-  originalPrice: number;
   rating: number;
   ratingInfo: string;
-  mainImage: string;
-  images: string[];
-  offers: string[];
-  nutrition: string[];
-  details: string[];
+  offers: any;
+  details: any;
+  nutrition: any;
   additionalInfo: string;
+  _id: string;
+  name: string;
+  categoryId: string;
+  subCategoryId: string;
+  price: number;
+  discountedPrice: number;
+  prescriptionRequired: boolean;
+  ingredients: string;
+  manufacturer: string;
+  quantity: string;
+  nutritionalValue: string;
+  description: string[];
+  coverImage: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  image4: string;
+  images: string[];
 }
 
 const product: Product = {
   name: "Cold Pressed Hemp Oil",
-  description: "100% Cold pressed hemp seed oil",
+  description: ["100% Cold pressed hemp seed oil"],
   price: 12100,
-  originalPrice: 14400,
+  discountedPrice: 14400,
   rating: 4,
   ratingInfo: "3849 Ratings & 2193 Reviews",
-  mainImage: "/assets/products/product1.svg",
+  coverImage: "/assets/products/product1.svg",
   images: [
     "/assets/products/product1.svg",
     "/assets/products/product1-1.svg",
@@ -50,8 +76,19 @@ const product: Product = {
     "No added preservatives",
     "Eco-friendly packaging",
   ],
-  additionalInfo:
-    "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,",
+  additionalInfo: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,",
+  _id: "",
+  categoryId: "",
+  subCategoryId: "",
+  prescriptionRequired: false,
+  ingredients: "",
+  manufacturer: "",
+  quantity: "",
+  nutritionalValue: "",
+  image1: "",
+  image2: "",
+  image3: "",
+  image4: ""
 };
 
 export default async function page(ctx: any) {
@@ -62,11 +99,15 @@ export default async function page(ctx: any) {
     { label: productId, href: `/products/${productId}` },
   ];
 
+  const productData = await getData(
+    `/api/product/${`67f36125ee6a447728b391f9`}`
+  );
+  console.log(productData);
   return (
     <div className="mt-[9.6rem] bg-white text-dark-primary">
       <Breadcrumbs paths={path} />
 
-      <ViewProduct product={product} />
+      <ViewProduct product={productData || product} />
 
       <ProductSlider
         title={"Similar Products"}

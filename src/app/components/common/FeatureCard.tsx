@@ -6,11 +6,11 @@ import ProductCard from "./ProductCard";
 export default function FeatureCard({ data, scale }: any) {
   return (
     <div
-      className={`p-4 bg-[#F2F3F7] ${
-        scale && "lg:scale-y-110 lg:top-[-1rem]"
+      className={`p-2 lg:p-4 m-auto  bg-[#F2F3F7] ${
+        scale && ""
       } z-[10] border-[1.5px] border-gray-300 relative`}
     >
-      <h2 className="text-dark-primary text-xl font-bold font-[raleway] mb-4">
+      <h2 className="text-dark-primary text-sm lg:text-xl font-bold font-[raleway] mb-4 h-9 lg:h-13 line-clamp-2">
         {data?.title}
       </h2>
       {data?.isProduct ? (
@@ -47,7 +47,7 @@ export default function FeatureCard({ data, scale }: any) {
       {data?.isProduct ? null : (
         <Link
           href={"/"}
-          className="text-primary font-medium font-[raleway] outline-0 mt-6 inline-block hover:text-primary duration-300"
+          className="text-primary text-xs lg:text-base font-medium font-[raleway] outline-0 MT-2 lg:mt-6 inline-block hover:text-primary duration-300"
         >
           See more
         </Link>

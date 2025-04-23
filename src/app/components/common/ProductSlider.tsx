@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -9,6 +9,10 @@ import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { FaMinus } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
+import Link from "next/link";
+import { products2 } from "../../page";
+import { getData } from "../../../utils/server";
+import ProductCardSkeleton from "../skeliton/PrioductCardSkeleton";
 
 interface Product {
   id: number;
@@ -31,24 +35,26 @@ interface CardClassName {
     text: string;
   };
   price: {
-    show: boolean;
-    text: string;
+    hide?: boolean;
+    text?: string;
   };
 }
 
 interface ProductSliderProps {
   title: string;
-  products: Product[];
+  products?: Product[];
   viewCard: number;
   cardSize: string;
   containerClass?: string;
   cardClassName?: CardClassName;
   useSlider?: boolean; // New prop to] decide if we use the slider or grid
   useCategorySlider?: boolean;
-  categories?: string[];
+  categories?: any[];
   useOfferBanner?: boolean;
   offerBanner?: string;
   useFilter?: boolean;
+  useSideCategory?: boolean;
+  sideCategoryTitle?: string;
 }
 
 const filterSections = [
@@ -74,12 +80,39 @@ export default function ProductSlider({
   categories,
   useOfferBanner,
   useFilter = false,
+  useSideCategory = false,
+  sideCategoryTitle = "Category",
 }: ProductSliderProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     categories && categories[0]
   );
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(
+    products || products2
+  );
   const [openSections, setOpenSections] = useState<string[]>([]);
+  const [subCategoryId, setSubCategoryId] = useState("");
+
+  const getProductsByCategory = async (id) => {
+    try {
+      setIsLoading(true); // Start loading
+      setSubCategoryId(id);
+      const subCategoriesProducts = await getData(
+        `/api/product${id && "?subCategoryId=" + id}`
+      );
+      setFilteredProducts(subCategoriesProducts?.result || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setFilteredProducts([]); // Optional: clear or keep previous state
+    } finally {
+      setIsLoading(false); // Stop loading in both success or error case
+    }
+  };
+  useEffect(() => {
+    if (useSideCategory) {
+      getProductsByCategory("");
+    }
+  }, []);
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) =>
@@ -88,6 +121,7 @@ export default function ProductSlider({
         : [...prev, section]
     );
   };
+
   // Filter products based on category selection
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
@@ -109,7 +143,7 @@ export default function ProductSlider({
         slidesPerView={viewCard || 5}
         breakpoints={{
           300: {
-            slidesPerView: 1,
+            slidesPerView: 1.5,
           },
           768: {
             slidesPerView: 3,
@@ -125,36 +159,78 @@ export default function ProductSlider({
         className="h-auto"
         grabCursor={true} // Enable mouse drag to scroll
       >
-        {filteredProducts.map((product, index) => (
-          <SwiperSlide key={index} className="w-full h-full">
-            <ProductCard
-              product={product}
-              cardSize={cardSize}
-              cardClassName={cardClassName}
-            />
-          </SwiperSlide>
-        ))}
+        {isLoading ? (
+          <div className="grid grid-cols-1 lg:grid-cols-4">
+            {Array(4)
+              .fill(null)
+              .map((_, index) => (
+                <ProductCardSkeleton
+                  key={index}
+                  cardSize="lg:h-40"
+                  cardClassName={null}
+                />
+              ))}
+          </div>
+        ) : filteredProducts?.length === 0 ? (
+          <div className="text-center h-20 w-full flex items-center justify-center">
+            No products available.
+          </div>
+        ) : (
+          filteredProducts.map((product, index) => (
+            <SwiperSlide key={index} className="w-full h-full">
+              <ProductCard
+                product={product}
+                cardSize={cardSize}
+                cardClassName={cardClassName}
+              />
+            </SwiperSlide>
+          ))
+        )}
       </Swiper>
     );
   };
 
   // Rendering grid layout if useSlider is false
   const renderGrid = () => {
+    if (isLoading)
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-4">
+          {Array(4)
+            .fill(null)
+            .map((_, index) => (
+              <ProductCardSkeleton
+                key={index}
+                cardSize="lg:h-40"
+                cardClassName={null}
+              />
+            ))}
+        </div>
+      );
+
     return (
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${
           viewCard + " " + "gap-4" || "4 gap-6"
         } `}
       >
-        {filteredProducts.map((product, index) => (
-          <div key={index} className="flex justify-center">
+        {filteredProducts?.length === 0 ? (
+          <>
+            <span></span>
+            <div className="text-center h-44 w-full flex items-center justify-center">
+              No products available.
+            </div>
+            <span></span>
+          </>
+        ) : (
+          filteredProducts.map((product, index) => (
             <ProductCard
+              key={index}
               product={product}
               cardSize={cardSize}
               cardClassName={cardClassName}
             />
-          </div>
-        ))}
+          ))
+        )}
       </div>
     );
   };
@@ -164,7 +240,7 @@ export default function ProductSlider({
     <div className="mb-6">
       <Swiper
         spaceBetween={10}
-        slidesPerView={5.5}
+        slidesPerView={10}
         loop={false}
         grabCursor={true} // Enable mouse dragging
         pagination={false}
@@ -196,7 +272,9 @@ export default function ProductSlider({
 
   return (
     <div
-      className={`max-w-7xl m-auto p-4 lg:px-16 hover:cursor-pointer ${containerClass}`}
+      className={`max-w-7xl m-auto  hover:cursor-pointer ${
+        containerClass ? containerClass : "p-4 lg:px-16"
+      }`}
     >
       <h2 className="text-dark-primary text-xl font-bold font-[raleway] mb-4">
         {title}
@@ -204,20 +282,40 @@ export default function ProductSlider({
 
       <div
         className={`${
-          (useOfferBanner || useFilter) && "grid grid-cols-1 lg:grid-cols-5 "
+          (useOfferBanner || useSideCategory || useFilter) &&
+          "grid grid-cols-1 lg:grid-cols-5 "
         }`}
       >
         {useOfferBanner && (
-          <div className="col-span-1 mb-8 lg:mb-0">
+          <div className="col-span-1 mb-8 lg:mb-0 relative">
             <Image
               src={"/assets/offers/offer1.png"}
               alt={title}
               width={400}
               height={200}
-              className="object-fill h-full"
+              className="object-fill h-full hidden lg:block"
             />
+            <Image
+              src={"/assets/offers/offermob1.svg"}
+              alt={title}
+              width={400}
+              height={200}
+              className="object-cover scale-x-110 h-64 lg:hidden"
+            />
+            <div className="absolute left-3 top-10 z-10 w-3/5 h-full">
+              <h3 className="text-xl mb-1">Hot Deal</h3>
+              <p className="line-clamp-4 text-sm  mb-4">
+                It is a long established fact that a reader will be distracted
+                by the readable content of a page when looking at its
+                layout.....
+              </p>
+              <Link href={"/"} className="text-white bg-primary p-2">
+                Order Now
+              </Link>
+            </div>
           </div>
         )}
+
         {useFilter && (
           <div className="col-span-1 mb-8 lg:mb-0 w-full max-w-xs p-4 hidden lg:block bg-white">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Filters</h2>
@@ -255,13 +353,56 @@ export default function ProductSlider({
             ))}
           </div>
         )}
-        <div className={`${(useOfferBanner || useFilter) && "col-span-4"}`}>
+
+        {useSideCategory && (
+          <div className="col-span-1 mb-8 lg:mb-0 w-full max-w-xs p-4 hidden lg:block bg-white">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              {sideCategoryTitle}
+            </h2>
+            {categories.map((category, index) => (
+              <div key={index} className="mb-3 border-t pt-3 border-gray-300">
+                <div
+                  className={`flex justify-between items-center cursor-pointer p-1 transition-all ease-in-out duration-300 hover:bg-gray-200 rounded-xl ${
+                    category?._id === subCategoryId
+                      ? "bg-primary text-white rounded-xl"
+                      : "text-gray-500"
+                  } `}
+                  onClick={() => getProductsByCategory(category?._id)}
+                >
+                  <label className="text-base font-bold  flex items-center justify-start gap-4 cursor-pointer">
+                    <Image
+                      src={
+                        category?.photo
+                          ? `/api/image?url=${category?.photo}`
+                          : "/assets/offers/offer1.png"
+                      }
+                      alt={title}
+                      width={400}
+                      height={200}
+                      className="object-fill h-10 w-10 rounded-xl cursor-pointer"
+                    />
+                    {category?.name}
+                  </label>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div
+          className={`${
+            (useOfferBanner || useSideCategory || useFilter) && "col-span-4"
+          }`}
+        >
           {/* Render Category Selector with Swiper */}
           {useCategorySlider && renderCategorySelector()}
 
           {/* Conditionally render either the Swiper or Grid layout */}
-          {useSlider ? renderSlider() : renderGrid()}
-          {(useOfferBanner || useFilter) && renderSlider()}
+          {/* {!useSlider && } */}
+          {!(useOfferBanner || useSideCategory || useFilter) &&
+            (useSlider ? renderSlider() : renderGrid())}
+          {(useOfferBanner || useSideCategory || useFilter) &&
+            (useSlider ? renderSlider() : renderGrid())}
         </div>
       </div>
     </div>
