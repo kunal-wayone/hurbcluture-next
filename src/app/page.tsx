@@ -1,21 +1,21 @@
-import HeroSection from "./components/common/HeroSectionSlider";
-import FeatureProductSection from "./components/common/FeatureProductSection";
+
 import BrowseCategory from "./components/common/BrowseCategory";
 import React from "react";
 import ProductSlider from "./components/common/ProductSlider";
-import NewLaunchSlider from "./components/common/NewLaunchSlider";
-import Testimonials from "./components/common/Testimonials";
+// import NewLaunchSlider from "./components/common/NewLaunchSlider";
+import AuthGuard from "./components/common/AuthGuard";
+import Wrapper from "./components/common/Wrapper";
 import { fetchHomeData } from "../utils/server";
 
-interface ISlide {
-  id: number;
-  imageUrl: string;
-  altText: string;
-  title: string;
-  description: string;
-  price?: string;
-  rating?: string;
-}
+// interface ISlide {
+//   id: number;
+//   imageUrl: string;
+//   altText: string;
+//   title: string;
+//   description: string;
+//   price?: string;
+//   rating?: string;
+// }
 
 interface Product {
   id: number;
@@ -28,421 +28,421 @@ interface Product {
   bestSeller?: boolean;
 }
 
-const heroSlides: ISlide[] = [
-  {
-    id: 1,
-    imageUrl: "/assets/banner/banner1.svg", // Make sure to replace with your actual image paths
-    altText: "First Slide",
-    title: "Cannazo India",
-    description:
-      "Discover the beauty of nature and adventure in every corner of the globe.",
-  },
-  {
-    id: 2,
-    imageUrl: "/assets/banner/banner2.svg",
-    altText: "Second Slide",
-    title: "The Future of Technology",
-    description:
-      "Embrace the digital revolution and be a part of the technological advancements shaping our world.",
-  },
-  {
-    id: 3,
-    imageUrl: "/assets/banner/banner3.svg",
-    altText: "Third Slide",
-    title: "Sustainability for Tomorrow",
-    description:
-      "Together, we can build a greener and more sustainable future for the generations to come.",
-  },
-];
+// const heroSlides: ISlide[] = [
+//   {
+//     id: 1,
+//     imageUrl: "/assets/banner/banner1.svg", // Make sure to replace with your actual image paths
+//     altText: "First Slide",
+//     title: "Cannazo India",
+//     description:
+//       "Discover the beauty of nature and adventure in every corner of the globe.",
+//   },
+//   {
+//     id: 2,
+//     imageUrl: "/assets/banner/banner2.svg",
+//     altText: "Second Slide",
+//     title: "The Future of Technology",
+//     description:
+//       "Embrace the digital revolution and be a part of the technological advancements shaping our world.",
+//   },
+//   {
+//     id: 3,
+//     imageUrl: "/assets/banner/banner3.svg",
+//     altText: "Third Slide",
+//     title: "Sustainability for Tomorrow",
+//     description:
+//       "Together, we can build a greener and more sustainable future for the generations to come.",
+//   },
+// ];
 
-const featureProductData = [
-  {
-    title: "Up to 45% off • Get today",
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Explore more for pets",
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Best seller in body care",
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-];
+// const featureProductData = [
+//   {
+//     title: "Up to 45% off • Get today",
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Explore more for pets",
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Best seller in body care",
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+// ];
 
-const featureProductData2 = [
-  {
-    title: "Up to 45% off • Get today",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Explore more for pets",
-    isProduct: true,
-    content: {
-      id: 5,
-      name: "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
-      image: "/assets/featureproduct/f14.png",
-      price: "3,53,39.00",
-      rating: "4",
-      review: "400k",
-      bestSeller: true,
-    },
-  },
-  {
-    title: "Best seller in body care",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-  {
-    title: "Top Accessories",
-    isProduct: false,
-    content: [
-      {
-        id: 1,
-        title: "Paper Products",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f11.png",
-      },
-      {
-        id: 1,
-        title: "Product 2",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f12.png",
-      },
-      {
-        id: 1,
-        title: "Product 3",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f13.png",
-      },
-      {
-        id: 1,
-        title: "Product 4",
-        description: "This is a product description.",
-        price: "$10.99",
-        image: "/assets/featureproduct/f14.png",
-      },
-    ],
-  },
-];
+// const featureProductData2 = [
+//   {
+//     title: "Up to 45% off • Get today",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Explore more for pets",
+//     isProduct: true,
+//     content: {
+//       id: 5,
+//       name: "Cannabis Pain Relief Oil - 50 ml ( Pack Of 3 ) | MEDICANN",
+//       image: "/assets/featureproduct/f14.png",
+//       price: "3,53,39.00",
+//       rating: "4",
+//       review: "400k",
+//       bestSeller: true,
+//     },
+//   },
+//   {
+//     title: "Best seller in body care",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Top Accessories",
+//     isProduct: false,
+//     content: [
+//       {
+//         id: 1,
+//         title: "Paper Products",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f11.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 2",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f12.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 3",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f13.png",
+//       },
+//       {
+//         id: 1,
+//         title: "Product 4",
+//         description: "This is a product description.",
+//         price: "$10.99",
+//         image: "/assets/featureproduct/f14.png",
+//       },
+//     ],
+//   },
+// ];
 
 export const categoryCardData = {
   title: "Up to 45% off • Get today",
@@ -817,227 +817,214 @@ const Home = async () => {
   const { loading, productData, categoryData }: any = await fetchHomeData();
   console.log(loading, productData, categoryData);
   return (
-    <div className="mt-[9.6rem]">
-      <HeroSection />
-      <div className="bg-white">
-        <FeatureProductSection scale={true} data={featureProductData} />
-        {categoryData?.length != 0 && (
-          <BrowseCategory title={"Browse Category"} data={categoryData} />
-        )}
-        <ProductSlider
-          title={"Related to items you’ve viewed"}
-          products={products}
-          viewCard={0}
-          cardSize={""}
-          useSlider={true}
-          useCategorySlider={false}
-        />
+    <AuthGuard>
+      <Wrapper>
+        <div className="">
+          {/* <HeroSection /> */}
+          <div className="bg-white">
+            {/* <FeatureProductSection scale={true} data={featureProductData} /> */}
+            {categoryData?.length != 0 && (
+              <BrowseCategory title={"Browse Category"} data={categoryData} />
+            )}
+            {/* <ProductSlider
+              title={"Related to items you’ve viewed"}
+              products={products}
+              viewCard={0}
+              cardSize={""}
+              useSlider={true}
+              useCategorySlider={false}
+            /> */}
 
-        <div className="bg-[#F5F5F5]">
-          <ProductSlider
-            title={"Most Searched Products"}
-            products={products2}
-            viewCard={6}
-            cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
-            cardClassName={{
-              card: "",
-              image: "",
-              bestSeller: "h-8 w-16 text-[10px]",
-              content: { box: "", title: "", text: "text-xs" },
-              price: { hide: false, text: "" },
-            }}
-            useSlider={true}
-            useCategorySlider={false}
-          />
+            {/* <div className="bg-[#F5F5F5]">
+              <ProductSlider
+                title={"Most Searched Products"}
+                products={products2}
+                viewCard={6}
+                cardSize={"lg:h-32"}
+                containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
+                cardClassName={{
+                  card: "",
+                  image: "",
+                  bestSeller: "h-8 w-16 text-[10px]",
+                  content: { box: "", title: "", text: "text-xs" },
+                  price: { hide: false, text: "" },
+                }}
+                useSlider={true}
+                useCategorySlider={false}
+              />
+            </div> */}
+            <ProductSlider
+              title={"Top Picks"}
+              products={productData}
+              viewCard={5}
+              cardSize={""}
+              containerClass={"bg-white p-4 lg:px-16 py-8"}
+              cardClassName={{
+                card: "",
+                image: "",
+                bestSeller: "h-8 w-16 text-[10px]",
+                content: { box: "", title: "", text: "text-xs" },
+                price: { hide: false, text: "" },
+              }}
+              useSlider={true}
+              useCategorySlider={true}
+              categories={categoryData}
+            />
+            {/* 
+            <ProductSlider
+              title={"Special Offers"}
+              products={products2}
+              viewCard={4}
+              cardSize={""}
+              containerClass={"bg-white p-4 lg:px-16 py-8"}
+              cardClassName={{
+                card: "",
+                image: "",
+                bestSeller: "h-8 w-16 text-[10px]",
+                content: { box: "", title: "", text: "text-xs" },
+                price: { hide: false, text: "" },
+              }}
+              useSlider={true}
+              useCategorySlider={false}
+              categories={[]}
+              useOfferBanner={true}
+              offerBanner=""
+            /> */}
+            {/* 
+            <ProductSlider
+              title={"Hemp Skincare"}
+              products={products2}
+              viewCard={6}
+              cardSize={"lg:h-32"}
+              containerClass={"p-4 lg:px-16 py-8"}
+              cardClassName={{
+                card: "",
+                image: "",
+                bestSeller: "h-8 w-16 text-[10px]",
+                content: { box: "", title: "", text: "text-xs" },
+                price: { hide: false, text: "" },
+              }}
+              useSlider={true}
+              useCategorySlider={false}
+            /> */}
+            {/* <FeatureProductSection scale={false} data={featureProductData2} /> */}
+
+            {/* <div className="bg-[#F5F5F5]">
+              <ProductSlider
+                title={"Buy Ayurveda Product"}
+                products={products2}
+                viewCard={6}
+                cardSize={"lg:h-32"}
+                containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
+                cardClassName={{
+                  card: "",
+                  image: "",
+                  bestSeller: "h-8 w-16 text-[10px]",
+                  content: { box: "", title: "", text: "text-xs" },
+                  price: { hide: false, text: "" },
+                }}
+                useSlider={true}
+                useCategorySlider={false}
+              />
+            </div> */}
+
+            {/* <ProductSlider
+              title={"THC Select"}
+              products={products2}
+              viewCard={6}
+              cardSize={"lg:h-32"}
+              containerClass={"p-4 lg:px-16 py-8"}
+              cardClassName={{
+                card: "",
+                image: "",
+                bestSeller: "h-8 w-16 text-[10px]",
+                content: { box: "", title: "", text: "text-xs" },
+                price: { hide: false, text: "" },
+              }}
+              useSlider={true}
+              useCategorySlider={true}
+              categories={[
+                "All",
+                "Electronics",
+                "Clothing",
+                "Home",
+                "Toys",
+                "Books",
+                "Electronics",
+                "Clothing",
+                "Home",
+                "Toys",
+                "Books",
+                "Electronics",
+                "Clothing",
+                "Home",
+                "Toys",
+                "Books",
+              ]}
+            /> */}
+
+            {/* <NewLaunchSlider heroSlides={heroSlides} /> */}
+
+            {/* <ProductSlider
+              title={"Recommended Products"}
+              products={products}
+              viewCard={0}
+              cardSize={""}
+              useSlider={true}
+              useCategorySlider={false}
+            /> */}
+
+            {/* <div className="bg-[#F5F5F5]">
+              <ProductSlider
+                title={"For your Mental Health"}
+                products={products2}
+                viewCard={6}
+                cardSize={"lg:h-32"}
+                containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
+                cardClassName={{
+                  card: "",
+                  image: "",
+                  bestSeller: "h-8 w-16 text-[10px]",
+                  content: { box: "", title: "", text: "text-xs" },
+                  price: { hide: false, text: "" },
+                }}
+                useSlider={true}
+                useCategorySlider={false}
+              />
+            </div> */}
+            {/* <div className="bg-[#F5F5F5]">
+              <ProductSlider
+                title={"Good for your health"}
+                products={products2}
+                viewCard={6}
+                cardSize={"lg:h-32"}
+                containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
+                cardClassName={{
+                  card: "",
+                  image: "",
+                  bestSeller: "h-8 w-16 text-[10px]",
+                  content: { box: "", title: "", text: "text-xs" },
+                  price: { hide: false, text: "" },
+                }}
+                useSlider={true}
+                useCategorySlider={false}
+              />
+            </div> */}
+
+            {/* <ProductSlider
+              title={"Complete your health package"}
+              products={products}
+              viewCard={0}
+              cardSize={""}
+              useSlider={true}
+              useCategorySlider={false}
+            /> */}
+
+            {/* <Testimonials  /> */}
+          </div>
         </div>
-        <ProductSlider
-          title={"Top Picks"}
-          products={products2}
-          viewCard={5}
-          cardSize={""}
-          containerClass={"bg-white p-4 lg:px-16 py-8"}
-          cardClassName={{
-            card: "",
-            image: "",
-            bestSeller: "h-8 w-16 text-[10px]",
-            content: { box: "", title: "", text: "text-xs" },
-            price: { hide: false, text: "" },
-          }}
-          useSlider={true}
-          useCategorySlider={true}
-          categories={[
-            "All",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-          ]}
-        />
-
-        <ProductSlider
-          title={"Special Offers"}
-          products={products2}
-          viewCard={4}
-          cardSize={""}
-          containerClass={"bg-white p-4 lg:px-16 py-8"}
-          cardClassName={{
-            card: "",
-            image: "",
-            bestSeller: "h-8 w-16 text-[10px]",
-            content: { box: "", title: "", text: "text-xs" },
-            price: { hide: false, text: "" },
-          }}
-          useSlider={true}
-          useCategorySlider={false}
-          categories={[]}
-          useOfferBanner={true}
-          offerBanner=""
-        />
-
-        <ProductSlider
-          title={"Hemp Skincare"}
-          products={products2}
-          viewCard={6}
-          cardSize={"lg:h-32"}
-          containerClass={"p-4 lg:px-16 py-8"}
-          cardClassName={{
-            card: "",
-            image: "",
-            bestSeller: "h-8 w-16 text-[10px]",
-            content: { box: "", title: "", text: "text-xs" },
-            price: { hide: false, text: "" },
-          }}
-          useSlider={true}
-          useCategorySlider={false}
-        />
-        <FeatureProductSection scale={false} data={featureProductData2} />
-
-        <div className="bg-[#F5F5F5]">
-          <ProductSlider
-            title={"Buy Ayurveda Product"}
-            products={products2}
-            viewCard={6}
-            cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
-            cardClassName={{
-              card: "",
-              image: "",
-              bestSeller: "h-8 w-16 text-[10px]",
-              content: { box: "", title: "", text: "text-xs" },
-              price: { hide: false, text: "" },
-            }}
-            useSlider={true}
-            useCategorySlider={false}
-          />
-        </div>
-
-        <ProductSlider
-          title={"THC Select"}
-          products={products2}
-          viewCard={6}
-          cardSize={"lg:h-32"}
-          containerClass={"p-4 lg:px-16 py-8"}
-          cardClassName={{
-            card: "",
-            image: "",
-            bestSeller: "h-8 w-16 text-[10px]",
-            content: { box: "", title: "", text: "text-xs" },
-            price: { hide: false, text: "" },
-          }}
-          useSlider={true}
-          useCategorySlider={true}
-          categories={[
-            "All",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-            "Electronics",
-            "Clothing",
-            "Home",
-            "Toys",
-            "Books",
-          ]}
-        />
-
-        <NewLaunchSlider heroSlides={heroSlides} />
-
-        <ProductSlider
-          title={"Recommended Products"}
-          products={products}
-          viewCard={0}
-          cardSize={""}
-          useSlider={true}
-          useCategorySlider={false}
-        />
-
-        <div className="bg-[#F5F5F5]">
-          <ProductSlider
-            title={"For your Mental Health"}
-            products={products2}
-            viewCard={6}
-            cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
-            cardClassName={{
-              card: "",
-              image: "",
-              bestSeller: "h-8 w-16 text-[10px]",
-              content: { box: "", title: "", text: "text-xs" },
-              price: { hide: false, text: "" },
-            }}
-            useSlider={true}
-            useCategorySlider={false}
-          />
-        </div>
-        <div className="bg-[#F5F5F5]">
-          <ProductSlider
-            title={"Good for your health"}
-            products={products2}
-            viewCard={6}
-            cardSize={"lg:h-32"}
-            containerClass={"bg-[#F5F5F5] p-4 lg:px-16 py-8"}
-            cardClassName={{
-              card: "",
-              image: "",
-              bestSeller: "h-8 w-16 text-[10px]",
-              content: { box: "", title: "", text: "text-xs" },
-              price: { hide: false, text: "" },
-            }}
-            useSlider={true}
-            useCategorySlider={false}
-          />
-        </div>
-
-        <ProductSlider
-          title={"Complete your health package"}
-          products={products}
-          viewCard={0}
-          cardSize={""}
-          useSlider={true}
-          useCategorySlider={false}
-        />
-
-        <Testimonials  />
-      </div>
-    </div>
+      </Wrapper>
+    </AuthGuard>
   );
 };
 export default Home;

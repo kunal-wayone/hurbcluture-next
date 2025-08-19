@@ -1,23 +1,48 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { IoStar } from "react-icons/io5";
 import { useRef, useState } from "react";
-import { Product } from "../page";
+import { Product } from "../../../../types/products";
+// import { useRouter } from "next/navigation";
+import { useCartStore } from "../../../../store/cartStore";
 
-const ProductDetails = ({ product }: { product: Product }) => {
+type Props = {
+  product: Product & {
+    images?: string[]; // temporary extension for UI thumbnails
+  };
+};
+
+const ProductDetails = ({ product }: Props) => {
   const [, setHoveredImage] = useState<string | null>(null);
-  const [mainImage, setMainImage] = useState(product?.coverImage);
+  const [mainImage, setMainImage] = useState(product.images?.[0] || "");
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [isZooming, setIsZooming] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const mainImageRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
+  const addToCart = useCartStore(state => state.addToCart);
+  const removeFromCart = useCartStore(state => state.removeFromCart);
+  const isInCart = useCartStore((state: any) => state.isInCart(product.id));
+  // const router = useRouter();
 
-  const handleError = () => {
-    setImgError(true);
+  const handleAddToCart = () => {
+    addToCart({
+      product: {
+        id: product.id,
+        name: product.name,
+        currentPrice: product.currentPrice,
+        sku: product.sku,
+        basePrice: product.basePrice,
+        weight: product.weight,
+        taxRate: product.taxRate,
+        maxOrderQuantity: product.maxOrderQuantity,
+      },
+      quantity,
+    });
+    // router.push("/cart");
   };
-
+  const handleError = () => setImgError(true);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = mainImageRef.current?.getBoundingClientRect();
@@ -40,22 +65,16 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className="flex flex-col-reverse lg:flex-row gap-4 mb-8">
             {/* Thumbnails */}
             <div className="lg:w-1/5 flex flex-row lg:flex-col items-center gap-2">
-              {[
-                product?.image1,
-                product?.image2,
-                product?.image3,
-                product?.image4,
-              ]?.map((img, i) => (
+              {product.images?.map((img, i) => (
                 <div
                   key={i}
                   onMouseEnter={() => setHoveredImage(img)}
                   onMouseLeave={() => setHoveredImage(null)}
                   onClick={() => setMainImage(img)}
-                  className={`h-20 w-20 cursor-pointer rounded-2xl border-[2px] p-1 ${
-                    mainImage === img
-                      ? "border-color-primary"
-                      : "border-gray-50"
-                  } overflow-hidden hover:border-color-primary`}
+                  className={`h-20 w-20 cursor-pointer rounded-2xl border-[2px] p-1 ${mainImage === img
+                    ? "border-color-primary"
+                    : "border-gray-50"
+                    } overflow-hidden hover:border-color-primary`}
                 >
                   <Image
                     alt={`Thumbnail ${i}`}
@@ -94,13 +113,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 className="w-full h-full object-cover"
                 onError={handleError}
               />
-              {/* Optional overlay */}
               {isZooming && (
                 <div className="absolute inset-0 bg-black/10 pointer-events-none" />
               )}
             </div>
 
-            {/* Zoomed Image */}
+            {/* Zoomed View */}
             {isZooming && (
               <div className="hidden lg:block absolute top-[calc(100%-105%)] left-[calc(100%-50%)] z-50 w-2/5 h-[90vh] max-h-[700px] border border-gray-300 rounded-xl overflow-hidden bg-white shadow-xl">
                 <div className="relative w-full h-full">
@@ -125,8 +143,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
             )}
           </div>
+
+          {/* Quantity and Buttons */}
           <div className="">
-            <div className="flex items-center justify-between lg:justify-start gap-4  mt-4">
+            <div className="flex items-center justify-between lg:justify-start gap-4 mt-4">
               <div className="flex items-center gap-4 px-4">
                 <Image
                   src="/assets/icons/quantity.svg"
@@ -152,148 +172,87 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </button>
               </div>
             </div>
-
             <div className="w-full flex items-center gap-4 p-2 mt-4">
-              <Link
-                href="/cart"
-                className="text-white flex items-center justify-center gap-4 bg-primary rounded-xl text-center text-base p-3 w-1/2 hover:bg-green-500/50 hover:text-primary transition duration-300"
-              >
-                <Image
-                  src="/assets/icons/cart.svg"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-                Add To Cart
-              </Link>
+              {!isInCart ? (
+                <button
+                  onClick={handleAddToCart}
+                  className="text-white flex items-center justify-center gap-4 bg-primary rounded-xl text-center text-base p-3 w-1/2 hover:bg-green-500/50 hover:text-primary transition duration-300"
+                >
+                  <Image src="/assets/icons/cart.svg" alt="" width={20} height={20} />
+                  Add To Cart
+                </button>
+              ) : (
+                <button
+                  onClick={() => removeFromCart(product.id)}
+                  className="text-white flex items-center justify-center gap-4 bg-red-600 rounded-xl text-center text-base p-3 w-1/2 hover:bg-red-700 transition duration-300"
+                >
+                  Remove from Cart
+                </button>
+              )}
+
               <Link
                 href="/order-summery"
                 className="text-white flex items-center justify-center gap-4 bg-primary rounded-xl text-center text-base p-3 w-1/2 hover:bg-green-500/50 hover:text-primary transition duration-300"
               >
-                <Image
-                  src="/assets/icons/buy.svg"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
+                <Image src="/assets/icons/buy.svg" alt="" width={20} height={20} />
                 Buy Now
               </Link>
             </div>
+
           </div>
         </div>
 
         {/* Right Column */}
         <div className="col-span-4 self-start space-y-4">
           <h2 className="text-xl font-bold">{product?.name}</h2>
-          <p className="text-gray-600">{product?.description}</p>
-
-          <div className="flex items-center gap-2">
-            <span className="bg-primary text-white p-2 rounded flex items-center gap-1">
-              {product?.rating ?? "NA"} <IoStar className="text-sm" />
-            </span>
-            <span className="text-secondary text-xs">
-              {product?.ratingInfo ?? "NA"}
-            </span>
-          </div>
+          <p className="text-gray-600">{product?.shortDescription}</p>
 
           <div>
             <span className="text-xl font-semibold">
-              ₹{product?.price.toLocaleString() ?? "NA"}
+              ₹{product?.currentPrice}
             </span>
             <span className="text-gray-400 line-through ml-2">
-              ₹{product?.discountedPrice.toLocaleString() ?? "NA"}
+              ₹{product?.basePrice}
             </span>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-1">Offers</h3>
-            {product?.offers?.map((offer, i) => (
-              <div
-                key={i}
-                className="flex items-center text-secondary gap-2 mt-1"
-              >
-                <Image
-                  src="/assets/icons/offers.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                />
-                <b className="text-dark-primary text-sm hidden lg:block">
-                  Special Price
-                </b>
-                <span className="text-sm">{offer}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full ">
-            <div className="flex flex-row lg:flex-col items-start gap-2">
-              <div className="flex items-center justify-start gap-4 w-full">
-                <Image
-                  src="/assets/icons/deliverto.svg"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-                <span className="font-medium">Deliver To</span>
-                <span className="text-primary hidden lg:block">Check</span>
-              </div>
-              <input
-                type="number"
-                placeholder="Enter Pincode"
-                className="ml-2 w-5/6 lg:w-full border-b-2 border-color-primary outline-none"
-              />
-              <span className="text-primary block lg:hidden">Check</span>
-            </div>
-
-            <div className="flex items-start justify-between lg:justify-start gap-2">
-              <Image
-                src="/assets/icons/doctor.svg"
-                alt=""
-                width={20}
-                height={20}
-              />
-              <span className="font-medium">Dr Prescription</span>
-              <label
-                htmlFor="prescription"
-                className="text-secondary cursor-pointer ml-2"
-              >
-                Upload
-              </label>
-              <input
-                type="file"
-                id="prescription"
-                name="prescription"
-                className="hidden"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-base font-semibold">Product Details</h3>
-            <ul className="list-disc pl-5 text-gray-600">
-              {product?.details?.map((item, i) => (
-                <li key={i} className="text-sm">
-                  {item}
-                </li>
+            <h3 className="font-semibold">Key Benefits</h3>
+            <ul className="list-disc pl-5 text-sm text-gray-700">
+              {product.keyBenefits?.map((benefit, i) => (
+                <li key={i}>{benefit}</li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-base font-semibold">Nutrition Value</h3>
-            <ul className="list-disc pl-5 text-gray-600">
-              {product?.nutrition?.map((item, i) => (
-                <li key={i} className="text-sm">
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <h3 className="font-semibold">HSN Code</h3>
+            <p className="text-sm text-gray-700">{product.hsnCode}</p>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold">Product Description</h3>
-            <p className="text-gray-500 text-sm">{product?.additionalInfo}</p>
+            <h3 className="font-semibold">Manufacturing & Expiry</h3>
+            <p className="text-sm text-gray-700">
+              MFG: {product.manufacturingDate} | EXP: {product.expiryDate}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">Country of Origin</h3>
+            <p className="text-sm text-gray-700">{product.countryOfOrigin}</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">Category</h3>
+            <p className="text-sm text-gray-700">
+              {product.category?.name} → {product.subCategory?.name} →{" "}
+              {product.subChildCategory?.name}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-base font-semibold">Full Description</h3>
+            <p className="text-sm text-gray-600">{product?.longDescription}</p>
           </div>
         </div>
       </div>

@@ -17,12 +17,9 @@ import ConfirmationModal from "./ConfirmationModal";
 export default function HeaderBar() {
   const { token, user, logout } = useAuth();
   const [isLogout, setIsLogout] = useState(false);
-
   const getInitials = (name: string) => {
-    const words = name.trim().split(" ");
-    const first = words[0]?.[0] || "";
-    const second = words[1]?.[0] || "";
-    return (first + second).toUpperCase();
+    const words = name?.slice(0, 1);
+    return words
   };
   return (
     <div className="bg-white flex justify-between p-4 lg:px-16 shadow  items-center gap-4 absolute top-0 z-[100] w-full">
@@ -43,7 +40,7 @@ export default function HeaderBar() {
       <div className="hidden lg:flex items-end gap-x-1.5 ">
         <IoLocation className="text-2xl text-gray-800" />
         <div>
-          <p className="text-secondary">Delever to Prashant</p>
+          <p className="text-secondary">Delev</p>
           <p className="text-dark-primary">New Delhi, 110001</p>
         </div>
       </div>
@@ -92,7 +89,7 @@ export default function HeaderBar() {
         {token && (
           <Link
             href={"/profile"}
-            className="hidden lg:flex justify-center items-center bg-primary text-xl font-semibold overflow-hidden rounded-full border border-gray-200 w-12 h-12  hover:scale-105 ease-in-out transition-all duration-300"
+            className="hidden lg:flex justify-center items-center text-white bg-primary text-xl font-semibold overflow-hidden rounded-full border border-gray-200 w-12 h-12  hover:scale-105 ease-in-out transition-all duration-300"
           >
             {/* <Image
               src="/assets/profile/dr.svg"
@@ -101,7 +98,7 @@ export default function HeaderBar() {
               height={800}
               className="object-contain w-full h-full"
             /> */}
-            {getInitials(user?.name)}
+            {getInitials(user?.firstName)}
           </Link>
         )}
         {token && (

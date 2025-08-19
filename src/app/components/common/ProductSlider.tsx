@@ -10,7 +10,6 @@ import Image from "next/image";
 import { FaMinus } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 import Link from "next/link";
-import { products2 } from "../../page";
 import { getData } from "../../../utils/server";
 import ProductCardSkeleton from "../skeliton/PrioductCardSkeleton";
 
@@ -42,6 +41,7 @@ interface CardClassName {
 
 interface ProductSliderProps {
   title: string;
+  titleClass?: string;
   products?: Product[];
   viewCard: number;
   cardSize: string;
@@ -70,6 +70,7 @@ const filterSections = [
 
 export default function ProductSlider({
   title,
+  titleClass,
   products,
   viewCard,
   cardSize,
@@ -83,23 +84,21 @@ export default function ProductSlider({
   useSideCategory = false,
   sideCategoryTitle = "Category",
 }: ProductSliderProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    categories && categories[0]
-  );
+  const [selectedCategory, ] = useState<string | null>("");
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(
-    products || products2
+    products 
   );
   const [openSections, setOpenSections] = useState<string[]>([]);
   const [subCategoryId, setSubCategoryId] = useState("");
-
   const getProductsByCategory = async (id) => {
     try {
       setIsLoading(true); // Start loading
       setSubCategoryId(id);
       const subCategoriesProducts = await getData(
-        `/api/product${id && "?subCategoryId=" + id}`
+        `/api/product${id && "?productCategoryId=" + id}`
       );
+      console.log(subCategoriesProducts, id)
       setFilteredProducts(subCategoriesProducts?.result || []);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -123,17 +122,17 @@ export default function ProductSlider({
   };
 
   // Filter products based on category selection
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
+  // const handleCategorySelect = (category: string) => {
+  //   setSelectedCategory(category);
 
-    if (category === "All") {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter((product) => product.category === category)
-      );
-    }
-  };
+  //   if (category === "All") {
+  //     setFilteredProducts(products);
+  //   } else {
+  //     setFilteredProducts(
+  //       products.filter((product) => product.category === category)
+  //     );
+  //   }
+  // };
 
   // Rendering Swiper slider if useSlider is true
   const renderSlider = () => {
@@ -209,9 +208,8 @@ export default function ProductSlider({
 
     return (
       <div
-        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${
-          viewCard + " " + "gap-4" || "4 gap-6"
-        } `}
+        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${viewCard + " " + "gap-4" || "4 gap-6"
+          } `}
       >
         {filteredProducts?.length === 0 ? (
           <>
@@ -252,17 +250,16 @@ export default function ProductSlider({
         modules={[Navigation, Pagination]}
         className="flex gap-4"
       >
-        {categories.map((category, index) => (
+        {[{ id: "", name: 'All' }, ...(categories || [])].map((category, index) => (
           <SwiperSlide key={index} className="flex justify-center">
             <button
-              onClick={() => handleCategorySelect(category)}
-              className={`text-base font-medium px-4  ${
-                selectedCategory === category
-                  ? "text-primary border-b boerder-primary "
-                  : "bg-transparent text-gray-400 hover:text-black "
-              }`}
+              onClick={() => getProductsByCategory(category?.id)}
+              className={`text-base w-full font-medium px-4  ${selectedCategory === category?.id
+                ? "text-primary border-b boerder-primary "
+                : "bg-transparent text-gray-400 hover:text-black "
+                }`}
             >
-              {category}
+              {category?.name}
             </button>
           </SwiperSlide>
         ))}
@@ -272,19 +269,17 @@ export default function ProductSlider({
 
   return (
     <div
-      className={`max-w-7xl m-auto  hover:cursor-pointer ${
-        containerClass ? containerClass : "p-4 lg:px-16"
-      }`}
+      className={`max-w-7xl m-auto  hover:cursor-pointer ${containerClass ? containerClass : "p-4 lg:px-16"
+        }`}
     >
-      <h2 className="text-dark-primary text-xl font-bold font-[raleway] mb-4">
+      <h2 className={`text-dark-primary text-xl font-bold font-[raleway] mb-4 ${titleClass}`}>
         {title}
       </h2>
 
       <div
-        className={`${
-          (useOfferBanner || useSideCategory || useFilter) &&
+        className={`${(useOfferBanner || useSideCategory || useFilter) &&
           "grid grid-cols-1 lg:grid-cols-5 "
-        }`}
+          }`}
       >
         {useOfferBanner && (
           <div className="col-span-1 mb-8 lg:mb-0 relative">
@@ -359,15 +354,14 @@ export default function ProductSlider({
             <h2 className="text-xl font-bold mb-4 text-gray-800">
               {sideCategoryTitle}
             </h2>
-            {categories.map((category, index) => (
+            {[{ id: "", name: 'All' }, ...categories].map((category, index) => (
               <div key={index} className="mb-3 border-t pt-3 border-gray-300">
                 <div
-                  className={`flex justify-between items-center cursor-pointer p-1 transition-all ease-in-out duration-300 hover:bg-gray-200 rounded-xl ${
-                    category?._id === subCategoryId
-                      ? "bg-primary text-white rounded-xl"
-                      : "text-gray-500"
-                  } `}
-                  onClick={() => getProductsByCategory(category?._id)}
+                  className={`flex justify-between items-center cursor-pointer p-1 transition-all ease-in-out duration-300 hover:bg-gray-200 rounded-xl ${category?._id === subCategoryId
+                    ? "bg-primary text-white rounded-xl"
+                    : "text-gray-500"
+                    } `}
+                  onClick={() => getProductsByCategory(category?.id)}
                 >
                   <label className="text-base font-bold  flex items-center justify-start gap-4 cursor-pointer">
                     <Image
@@ -390,9 +384,8 @@ export default function ProductSlider({
         )}
 
         <div
-          className={`${
-            (useOfferBanner || useSideCategory || useFilter) && "col-span-4"
-          }`}
+          className={`${(useOfferBanner || useSideCategory || useFilter) && "col-span-4"
+            }`}
         >
           {/* Render Category Selector with Swiper */}
           {useCategorySlider && renderCategorySelector()}

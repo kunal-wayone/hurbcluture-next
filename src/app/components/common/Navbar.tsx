@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { BiCategoryAlt, BiSolidOffer } from "react-icons/bi";
+import { usePathname } from "next/navigation";
+import { BiSolidOffer } from "react-icons/bi";
 import { Fetch } from "../../../hooks/apiutils";
+import CategoryDropdown from "./CategoryDropdown";
 
 interface MenuItem {
   name: string;
@@ -19,20 +20,19 @@ interface MenuItem {
 
 const Navbar = () => {
   const pathname = usePathname(); // Get current route
-  const route = useRouter();
   const [category, setCategory] = useState([]);
   const [activeSubmenuId, setActiveSubmenuId] = useState<string | null>(null); // Track active submenu by ID
 
   const getCategory = async () => {
     try {
       const response: any = await Fetch(
-        "/api/category",
+        "/api/product-category",
         undefined,
         5000,
         false
       );
-      const data = response.data;
-      console.log(response);
+      const data = response?.data;
+      console.log(response?.data?.result);
       if (!response.success) throw new Error("Failed to fetch categories");
       setCategory(data?.result);
     } catch (error) {
@@ -63,6 +63,7 @@ const Navbar = () => {
   // Define menuItems with submenus for "Services" and "Industries"
   const menuItems: MenuItem[] = [
     { name: "Home", path: "/" },
+    { name: "Brands", path: "/brands" },
     { name: "About", path: "/about" },
     {
       name: "Contact",
@@ -79,29 +80,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white font-[raleway] flex justify-between pt-5 p-3 lg:px-16 lg:justify-between items-center absolute top-20 z-[99] w-full">
-      <div className=" flex justify-center items-center">
-        <BiCategoryAlt className="text-3xl text-dark-primary" />
-        <select
-          name="category"
-          id="Category"
-          onChange={(e: any) => {
-            route?.push(`/category?id=${e?.target?.value}`);
-            console.log(e?.target?.value);
-          }}
-          className="w-36 font-[raleway] text-dark-primary outline-0"
-        >
-          <option value="All">All Categories</option>
-          {category &&
-            category.map((cat: any, index: any) => (
-              <option key={index} value={cat?._id}>
-                {cat?.name}
-              </option>
-            ))}
-        </select>
-
-        <span className="h-6 ml-10 w-[1px] inline-block bg-gray-200"></span>
-      </div>
-
+      <CategoryDropdown categories={category} />
       {/* Desktop Menu */}
       <ul className="hidden max-w-6xl lg:flex justify-start items-center w-3/5 text-dark-primary">
         {menuItems.map((item) => (
@@ -112,11 +91,10 @@ const Navbar = () => {
           >
             <Link href={item.path} className="border-none outline-none">
               <li
-                className={`mr-10 text-sm font-[raleway] ${
-                  pathname === item.path
-                    ? "text-primary"
-                    : "text-dark-primary hover:text-gray-100 transition duration-200"
-                }`}
+                className={`mr-10 text-sm font-[raleway] ${pathname === item.path
+                  ? "text-primary"
+                  : "text-dark-primary hover:text-gray-100 transition duration-200"
+                  }`}
                 onClick={(e) => {
                   if (item?.submenu) e.preventDefault(); // Prevent link navigation to enable click behavior
                   handleClick(item.name); // Toggle submenu on click
@@ -127,11 +105,10 @@ const Navbar = () => {
             </Link>
 
             {/* Submenu */}
-            {item?.submenu  && (
+            {item?.submenu && (
               <div
-                className={`absolute top-20 left-[-20rem] w-[60vw] mt-2 rounded-2xl bg-gray-50 text-dark-primary ${
-                  activeSubmenuId === item.name ? "block" : "hidden"
-                }`}
+                className={`absolute top-20 left-[-20rem] w-[60vw] mt-2 rounded-2xl bg-gray-50 text-dark-primary ${activeSubmenuId === item.name ? "block" : "hidden"
+                  }`}
                 onMouseLeave={handleMouseLeave} // Reset on mouse leave
               >
                 <ul className="space-y-2 p-2 grid grid-cols-1 lg:grid-cols-3">

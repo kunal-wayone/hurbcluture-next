@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoLogInOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { Post } from "../../hooks/apiutils";
-import OtpVerification from "../components/OtpVerification";
+import { Post } from "../../../hooks/apiutils";
+import OtpVerification from "../../components/OtpVerification";
+import Link from "next/link";
+import { useAuth } from "../../../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 type LoginFormData = {
   email: string;
@@ -12,6 +15,8 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
+  const { login } = useAuth()
+  const route = useRouter()
   const {
     register,
     handleSubmit,
@@ -22,22 +27,22 @@ export default function LoginPage() {
   const [isModalVisible, setIsModalVisible] = useState<any>(false);
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res: any = await Post("/api/user/send-otp", data, 5000);
-      if (res.success) {
-        setIsModalVisible(true);
-        toast.success(
-          "Otp sended successfully. Please check your email for the verification code."
-        );
-      }
+      const res: any = await Post("/api/customer/login", data, 5000);
       // if (res.success) {
-      //   login(res?.token, res?.user);
-      //   route.push("/");
-      //   console.log(res);
+      //   // setIsModalVisible(true);
       //   toast.success(
-      //     "Login successful. Please check your email for the verification code."
+      //     "Login successfully"
       //   );
-      //   console.log("Login successful");
       // }
+      if (res.success) {
+        login(res?.data?.token, res?.customer?.user);
+        route.replace("/");
+        console.log(res);
+        toast.success(
+          "Login successful."
+        );
+        console.log("Login successful");
+      }
     } catch (error: any) {
       console.error("Error during sending otp:", error);
       toast.error(error?.message || "Something went wrong during otp sending.");
@@ -48,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen mt-[9.6rem] bg-cover bg-center flex items-center justify-center"
+      className="min-h-screen bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: 'url("/assets/banner/loginbanner1.png")' }}
     >
       <div className="p-8 rounded-2xl w-full max-w-md text-center space-y-6">
@@ -76,7 +81,7 @@ export default function LoginPage() {
                   message: "Invalid email address",
                 },
               })}
-              className="w-full px-4 py-2 border rounded-xl border-[#5BB35B] focus:outline-none focus:ring-2 focus:ring-[#5BB35B]"
+              className="w-full px-4 py-2 text-black border rounded-xl border-[#5BB35B] focus:outline-none focus:ring-2 focus:ring-[#5BB35B]"
             />
             {errors.email && (
               <p className="text-red-600 text-sm mt-1">
@@ -95,7 +100,7 @@ export default function LoginPage() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="w-full px-4 py-2 border border-[#5BB35B] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5BB35B]"
+              className="w-full px-4 py-2 text-black border border-[#5BB35B] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5BB35B]"
             />
             {errors.password && (
               <p className="text-red-600 text-sm mt-1">
@@ -106,11 +111,10 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-fit px-8 py-2 rounded-xl flex items-center justify-center m-auto transition ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-primary hover:bg-[#5BB35B] text-white"
-            }`}
+            className={`w-fit px-8 py-2 rounded-xl flex items-center justify-center m-auto transition ${loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-primary hover:bg-[#5BB35B] text-white"
+              }`}
           >
             {loading ? (
               <>
@@ -138,11 +142,15 @@ export default function LoginPage() {
               </>
             ) : (
               <>
-                Send Otp
+                Login
                 <IoLogInOutline className="ml-2" />
               </>
             )}
           </button>
+
+          <div className="text-center my-4">
+            <p className="text-sm">Don&apos;t have an acccount? <Link href={"/auth/register"} className="text-primary underline ">Register</Link></p>
+          </div>
         </form>
 
         {isModalVisible && (

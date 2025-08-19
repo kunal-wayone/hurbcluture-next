@@ -8,14 +8,14 @@ import dayjs from "dayjs";
 import ConfirmationModal from "../components/common/ConfirmationModal";
 import { Put } from "../../hooks/apiutils";
 import { toast } from "react-toastify";
+import AuthGuard from "../components/common/AuthGuard";
+import Wrapper from "../components/common/Wrapper";
 
 const ProfilePage = () => {
+  const { logout, user } = useAuth();
   const [loadingSection, setLoadingSection] = useState<string | null>(null);
   const [isLogout, setIsLogout] = useState(false);
-  const [userData, ] = useState(
-    JSON.parse(localStorage.getItem("userData"))
-  );
-  const {  logout } = useAuth();
+  const [userData,] = useState(user);
 
   const [editState, setEditState] = useState({
     personal: false,
@@ -115,135 +115,137 @@ const ProfilePage = () => {
   );
 
   return (
-    <div className="mt-[9.6rem] bg-white text-dark-primary">
-      <div className="max-w-7xl mx-auto p-4 lg:p-16">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-8">
-          My Profile
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Personal Info */}
-          <div className=" ">
-            <div className="flex justify-start gap-4 items-center mb-4">
-              <h3 className="text-2xl font-semibold text-primary">
-                Personal Info
-              </h3>
-              {!editState.personal && (
-                <BiEdit
-                  onClick={() => handleEdit("personal")}
-                  className="cursor-pointer text-gray-500"
-                />
-              )}
-            </div>
-            {renderRow(
-              "Name",
-              formData.personal.name,
-              editState.personal,
-              (e) => handleChange("personal", "name", e.target.value)
-            )}
-            {renderRow(
-              "Gender",
-              formData.personal.gender,
-              editState.personal,
-              (e) => handleChange("personal", "gender", e.target.value)
-            )}
-            {renderRow(
-              "Date of Birth",
-              formData.personal.dateOfBirth
-                ? dayjs(formData.personal.dateOfBirth).format("YYYY-MM-DD")
-                : "",
-              editState.personal,
-              (e) =>
-                handleChange(
-                  "personal",
-                  "dateOfBirth",
-                  dayjs(e.target.value).toISOString()
-                ),
-              "date"
-            )}
+    <AuthGuard>
+      <Wrapper>
+        <div className=" bg-white text-dark-primary">
+          <div className="max-w-7xl mx-auto p-4 lg:p-16">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-8">
+              My Profile
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Personal Info */}
+              <div className=" ">
+                <div className="flex justify-start gap-4 items-center mb-4">
+                  <h3 className="text-2xl font-semibold text-primary">
+                    Personal Info
+                  </h3>
+                  {!editState.personal && (
+                    <BiEdit
+                      onClick={() => handleEdit("personal")}
+                      className="cursor-pointer text-gray-500"
+                    />
+                  )}
+                </div>
+                {renderRow(
+                  "Name",
+                  formData.personal.name,
+                  editState.personal,
+                  (e) => handleChange("personal", "name", e.target.value)
+                )}
+                {renderRow(
+                  "Gender",
+                  formData.personal.gender,
+                  editState.personal,
+                  (e) => handleChange("personal", "gender", e.target.value)
+                )}
+                {renderRow(
+                  "Date of Birth",
+                  formData.personal.dateOfBirth
+                    ? dayjs(formData.personal.dateOfBirth).format("YYYY-MM-DD")
+                    : "",
+                  editState.personal,
+                  (e) =>
+                    handleChange(
+                      "personal",
+                      "dateOfBirth",
+                      dayjs(e.target.value).toISOString()
+                    ),
+                  "date"
+                )}
 
-            {editState.personal && (
-              <button
-                onClick={() => handleSave("personal", formData?.personal)}
-                className="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-primary-dark"
-                disabled={loadingSection === "personal"}
-              >
-                {loadingSection === "personal" ? "Saving..." : "Save"}
-              </button>
-            )}
-          </div>
+                {editState.personal && (
+                  <button
+                    onClick={() => handleSave("personal", formData?.personal)}
+                    className="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-primary-dark"
+                    disabled={loadingSection === "personal"}
+                  >
+                    {loadingSection === "personal" ? "Saving..." : "Save"}
+                  </button>
+                )}
+              </div>
 
-          {/* Contact Info */}
-          <div className=" ">
-            <div className="flex justify-start gap-4 items-center mb-4">
-              <h3 className="text-2xl font-semibold text-primary">
-                Contact Info
-              </h3>
-              {!editState.contact && (
-                <BiEdit
-                  onClick={() => handleEdit("contact")}
-                  className="cursor-pointer text-gray-500"
-                />
-              )}
-            </div>
-            {renderRow(
-              "Email",
-              formData.contact.email,
-              editState.contact,
-              (e) => handleChange("contact", "email", e.target.value)
-            )}
-            {renderRow(
-              "Phone",
-              formData.contact.phone,
-              editState.contact,
-              (e) => handleChange("contact", "phone", e.target.value)
-            )}
+              {/* Contact Info */}
+              <div className=" ">
+                <div className="flex justify-start gap-4 items-center mb-4">
+                  <h3 className="text-2xl font-semibold text-primary">
+                    Contact Info
+                  </h3>
+                  {!editState.contact && (
+                    <BiEdit
+                      onClick={() => handleEdit("contact")}
+                      className="cursor-pointer text-gray-500"
+                    />
+                  )}
+                </div>
+                {renderRow(
+                  "Email",
+                  formData.contact.email,
+                  editState.contact,
+                  (e) => handleChange("contact", "email", e.target.value)
+                )}
+                {renderRow(
+                  "Phone",
+                  formData.contact.phone,
+                  editState.contact,
+                  (e) => handleChange("contact", "phone", e.target.value)
+                )}
 
-            {editState.contact && (
-              <button
-                onClick={() => handleSave("contact", formData?.contact)}
-                className="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-primary-dark"
-                disabled={loadingSection === "contact"}
-              >
-                {loadingSection === "contact" ? "Saving..." : "Save"}
-              </button>
-            )}
-          </div>
+                {editState.contact && (
+                  <button
+                    onClick={() => handleSave("contact", formData?.contact)}
+                    className="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-primary-dark"
+                    disabled={loadingSection === "contact"}
+                  >
+                    {loadingSection === "contact" ? "Saving..." : "Save"}
+                  </button>
+                )}
+              </div>
 
-          {/* Account Info */}
-          <div className=" ">
-            <div className="flex justify-start gap-4 items-center mb-4">
-              <h3 className="text-2xl font-semibold text-primary">
-                Account Info
-              </h3>
+              {/* Account Info */}
+              <div className=" ">
+                <div className="flex justify-start gap-4 items-center mb-4">
+                  <h3 className="text-2xl font-semibold text-primary">
+                    Account Info
+                  </h3>
 
-              {/* {!editState.account && (
+                  {/* {!editState.account && (
                 <BiEdit
                   onClick={() => handleEdit("account")}
                   className="cursor-pointer"
                 />
               )} */}
-            </div>
-            <div className="space-y-4">
-              <Link
-                href={""}
-                className="text-base flex items-center gap-2 font-semibold text-gray-800"
-              >
-                Forgot Password <FaArrowRight className="h-3" />
-              </Link>
-              <Link
-                href={""}
-                className="text-base flex items-center gap-2 font-semibold text-gray-800"
-              >
-                Change Password <FaArrowRight className="h-3" />
-              </Link>
-              <span
-                onClick={() => setIsLogout(true)}
-                className="text-base flex items-center gap-2 font-semibold text-red-500 hover:text-red-600 cursor-pointer active:scale-[0.98] ease-in-out transition-all duration-300 "
-              >
-                Log Out <FaArrowRight className="h-3" />
-              </span>
-            </div>
-            {/* {renderRow(
+                </div>
+                <div className="space-y-4">
+                  <Link
+                    href={""}
+                    className="text-base flex items-center gap-2 font-semibold text-gray-800"
+                  >
+                    Forgot Password <FaArrowRight className="h-3" />
+                  </Link>
+                  <Link
+                    href={""}
+                    className="text-base flex items-center gap-2 font-semibold text-gray-800"
+                  >
+                    Change Password <FaArrowRight className="h-3" />
+                  </Link>
+                  <span
+                    onClick={() => setIsLogout(true)}
+                    className="text-base flex items-center gap-2 font-semibold text-red-500 hover:text-red-600 cursor-pointer active:scale-[0.98] ease-in-out transition-all duration-300 "
+                  >
+                    Log Out <FaArrowRight className="h-3" />
+                  </span>
+                </div>
+                {/* {renderRow(
               "Current Password",
               formData.account.currentPassword,
               editState.account,
@@ -258,7 +260,7 @@ const ProfilePage = () => {
               "password"
             )} */}
 
-            {/* {editState.account && (
+                {/* {editState.account && (
               <button
                 onClick={() => handleSave("account",formData?.account)}
                 className="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-primary-dark"
@@ -267,20 +269,22 @@ const ProfilePage = () => {
                 {loadingSection === "account" ? "Saving..." : "Save"}
               </button>
             )} */}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <ConfirmationModal
-        open={isLogout}
-        onClose={() => setIsLogout(false)}
-        title="Logout Confirmation"
-        message="Are you sure you want to logout?"
-        onConfirm={logout}
-        confirmLabel="Yes, Log Out"
-        cancelLabel="Cancel"
-      />
-    </div>
+          <ConfirmationModal
+            open={isLogout}
+            onClose={() => setIsLogout(false)}
+            title="Logout Confirmation"
+            message="Are you sure you want to logout?"
+            onConfirm={logout}
+            confirmLabel="Yes, Log Out"
+            cancelLabel="Cancel"
+          />
+        </div>
+      </Wrapper>
+    </AuthGuard>
   );
 };
 

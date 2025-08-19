@@ -18,7 +18,7 @@ export default function BrowseCategory({ title, data }: any) {
       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> */}
       <Swiper
         spaceBetween={5}
-        slidesPerView={4}
+        slidesPerView={3}
         loop={true}
         autoplay={{
           delay: 3000,

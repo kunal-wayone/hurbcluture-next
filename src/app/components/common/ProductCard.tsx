@@ -95,7 +95,7 @@ export default function ProductCard({ product, cardSize, cardClassName }) {
                 cardClassName?.price?.text || "text-left text-xl lg:text-base"
               }`}
             >
-              ₹{product?.discountedPrice} <span className="text-xs text-gray-400 line-through ml-2"> ₹{product?.price}</span>
+              ₹{product?.currentPrice} <span className="text-xs text-gray-400 line-through ml-2"> ₹{product?.basePrice}</span>
             </p>
           )}
         </div>

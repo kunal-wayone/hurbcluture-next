@@ -4,147 +4,118 @@ import ProductSlider from "../../components/common/ProductSlider";
 import { products } from "../../page";
 import ReviewAndRating from "./components/ReviewAndRating";
 import { getData } from "../../../utils/server";
-
-// export interface Product {
-//   name: string;
-//   description: string;
-//   price: number;
-//   originalPrice: number;
-//   rating: number;
-//   ratingInfo: string;
-//   mainImage: string;
-//   images: string[];
-//   offers: string[];
-//   nutrition: string[];
-//   details: string[];
-//   additionalInfo: string;
-// }
-
-export interface Product {
-  rating: number;
-  ratingInfo: string;
-  offers: any;
-  details: any;
-  nutrition: any;
-  additionalInfo: string;
-  _id: string;
-  name: string;
-  categoryId: string;
-  subCategoryId: string;
-  price: number;
-  discountedPrice: number;
-  prescriptionRequired: boolean;
-  ingredients: string;
-  manufacturer: string;
-  quantity: string;
-  nutritionalValue: string;
-  description: string[];
-  coverImage: string;
-  image1: string;
-  image2: string;
-  image3: string;
-  image4: string;
-  images: string[];
-}
+import AuthGuard from "../../components/common/AuthGuard";
+import Wrapper from "../../components/common/Wrapper";
+import { Product } from "../../../types/products";
 
 const product: Product = {
-  name: "Cold Pressed Hemp Oil",
-  description: ["100% Cold pressed hemp seed oil"],
-  price: 12100,
-  discountedPrice: 14400,
-  rating: 4,
-  ratingInfo: "3849 Ratings & 2193 Reviews",
-  coverImage: "/assets/products/product1.svg",
-  images: [
-    "/assets/products/product1.svg",
-    "/assets/products/product1-1.svg",
-    "/assets/products/product1-2.svg",
-    "/assets/products/product1-3.svg",
+  id: 5,
+  name: "Blue Ashwagandha Root Extract",
+  sku: "BLUE-ASHWA-001",
+  brandId: 5,
+  productCategoryId: 6,
+  productSubCategoryId: 1,
+  productSubChildCategoryId: 3,
+  additionalCategoryIds: null,
+  shortDescription: "Supports stress relief and vitality.",
+  longDescription:
+    "Blue Ashwagandha Root Extract is made with premium, organically sourced Ashwagandha. It helps in managing stress, boosts energy levels, and promotes overall well-being. Formulated by BLUE Herbal Life, it’s a perfect blend of tradition and innovation.",
+  keyBenefits: [
+    "Reduces cortisol levels",
+    "Improves sleep quality",
+    "Enhances physical endurance"
   ],
-  offers: [
-    "There are many variations of passages",
-    "Buy 1 get 1 free for new users",
-    "Extra 10% off on prepaid orders",
+  status: "Active",
+  featured: true,
+  basePrice: "899.00",
+  currentPrice: "749.00",
+  costPrice: "420.00",
+  taxRate: "5.00",
+  hsnCode: "30049011",
+  lowStockThreshold: 15,
+  maxOrderQuantity: 10,
+  weight: "0.30",
+  dimensions: {
+    length: 12,
+    width: 6,
+    height: 6
+  },
+  batchNumber: "BHL-ASHWA-BATCH01",
+  manufacturingDate: "2025-06-15",
+  expiryDate: "2027-06-15",
+  countryOfOrigin: "India",
+  legalDisclaimer:
+    "For adults only. Consult a physician if pregnant, nursing, or under medication. This is not a substitute for medical advice.",
+  searchTags: [
+    "ashwagandha",
+    "blue herbal life",
+    "stress relief",
+    "immunity booster"
   ],
-  nutrition: [
-    "100% Cold pressed hemp seed oil",
-    "Rich in Omega 3 and 6",
-    "Contains essential fatty acids",
-  ],
-  details: [
-    "Cold pressed for maximum purity",
-    "No added preservatives",
-    "Eco-friendly packaging",
-  ],
-  additionalInfo: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,",
-  _id: "",
-  categoryId: "",
-  subCategoryId: "",
-  prescriptionRequired: false,
-  ingredients: "",
-  manufacturer: "",
-  quantity: "",
-  nutritionalValue: "",
-  image1: "",
-  image2: "",
-  image3: "",
-  image4: ""
+  metaTitle:
+    "Blue Herbal Ashwagandha Extract - Stress Relief & Energy Booster",
+  metaDescription:
+    "Buy Blue Herbal Life's Ashwagandha Extract capsules online. Natural stress relief and immunity support with pure Ayurvedic ingredients.",
+  systemGenerated: false,
+  createdAt: "2025-08-01T08:00:06.105Z",
+  updatedAt: "2025-08-01T08:00:06.105Z",
+  deletedAt: null,
+  category: {
+    id: 6,
+    name: "Supplementsyyy"
+  },
+  subCategory: {
+    id: 1,
+    name: "Protein Powders"
+  },
+  subChildCategory: {
+    id: 3,
+    name: "Whey Isolate"
+  }
 };
 
 export default async function page(ctx: any) {
-  const { productId } = await ctx.params;
+  const { productId } = ctx.params;
+
   const path = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/products" },
     { label: productId, href: `/products/${productId}` },
   ];
 
-  const productData = await getData(
-    `/api/product/${`67f36125ee6a447728b391f9`}`
-  );
-  console.log(productData);
+  const productData = await getData(`/api/product/${productId}`);
+
   return (
-    <div className="mt-[9.6rem] bg-white text-dark-primary">
-      <Breadcrumbs paths={path} />
+    <AuthGuard>
+      <Wrapper>
+        <div className="bg-white text-dark-primary">
+          <Breadcrumbs paths={path} color="text-gray-800" />
 
-      <ViewProduct product={productData || product} />
+          {/* ViewProduct should be updated to accept and display all fields from Product */}
+          <ViewProduct product={productData || product} />
 
-      <ProductSlider
-        title={"Similar Products"}
-        products={products}
-        viewCard={0}
-        cardSize={""}
-        useSlider={true}
-        useCategorySlider={false}
-      />
-      <ReviewAndRating />
+          <ProductSlider
+            title="Similar Products"
+            products={products}
+            viewCard={0}
+            cardSize=""
+            useSlider={true}
+            useCategorySlider={false}
+          />
 
-      <ProductSlider
-        title={"These Products might attract you"}
-        products={products}
-        viewCard={0}
-        cardSize={""}
-        containerClass="pb-12"
-        useSlider={true}
-        useCategorySlider={false}
-      />
+          <ReviewAndRating />
 
-      {/* <ProductSlider
-        title={"These Products might attract you"}
-        products={products2}
-        viewCard={6}
-        cardSize={"lg:h-32"}
-        containerClass={"pb-14 py-8"}
-        cardClassName={{
-          card: "",
-          image: "",
-          bestSeller: "h-8 w-16 text-[10px]",
-          content: { box: "", title: "", text: "text-xs" },
-          price: { show: false, text: "" },
-        }}
-        useSlider={true}
-        useCategorySlider={false}
-      /> */}
-    </div>
+          <ProductSlider
+            title="These Products might attract you"
+            products={products}
+            viewCard={0}
+            cardSize=""
+            containerClass="pb-12"
+            useSlider={true}
+            useCategorySlider={false}
+          />
+        </div>
+      </Wrapper>
+    </AuthGuard>
   );
 }

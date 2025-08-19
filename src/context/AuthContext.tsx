@@ -36,20 +36,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchUser = async (sharedToken: string) => {
       try {
-        const endpoint = "api/user/get-current-user";
+        const endpoint = "/api/customer";
         const response: { success: boolean; data: any; message: string } =
           await Fetch(endpoint, {}, 5000);
+        console.log(response)
         if (response?.success && response?.data) {
           setLoading(false);
           setToken(sharedToken);
           setUser(response?.data);
-          return navigate.replace(pathName);
-        } else return navigate.replace("/login");
+          return navigate.replace(pathName === '/auth/login' ? '/' : pathName);
+        } else return navigate.replace("/auth/login");
       } catch (error) {
         setLoading(false);
         console.log(error);
         localStorage.clear();
-        return navigate.replace("/login");
+        return navigate.replace("/auth/login");
+      } finally {
+        setLoading(false)
       }
     };
     const sharedToken = localStorage.getItem("accessToken");
@@ -69,7 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setToken(null);
     setUser({});
     localStorage.clear();
-    return navigate.replace("/login");
+    return navigate.replace("/auth/login");
   };
 
   return (

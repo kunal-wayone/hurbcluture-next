@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Raleway, Ramabhadra, DM_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/common/Navbar";
-import HeaderBar from "./components/common/HeaderBar";
 import React from "react";
-import Footer from "./components/common/Footer";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "../context/AuthContext";
 
@@ -45,9 +42,7 @@ export default function RootLayout({
       <body
         className={`${raleway.variable} ${ramabhadra.variable} ${dmSans.variable} antialiased font-[raleway]`}
       >
-        <AuthProvider>
-          <HeaderBar />
-          <Navbar />
+        <AuthProvider >
           {children}
           <ToastContainer
             rtl={false}
@@ -56,7 +51,6 @@ export default function RootLayout({
             position="top-right"
             hideProgressBar={false}
           />
-          <Footer />
         </AuthProvider>
       </body>
     </html>
